@@ -151,8 +151,7 @@
         margin-bottom: 20px;
       }
 
-      .theme-toggle {
-        width: 100%;
+      .theme-inline {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -161,28 +160,40 @@
         border-radius: 14px;
         border: 1px solid var(--border);
         background: var(--panel);
-        color: var(--text);
-        cursor: pointer;
-        font: inherit;
+      }
+
+      .theme-inline-label {
+        font-size: 0.95rem;
         font-weight: 700;
+        color: var(--text);
       }
 
-      .theme-toggle small {
-        display: block;
-        font-weight: 500;
-        color: var(--muted);
-        margin-top: 2px;
-      }
-
-      .theme-pill {
-        min-width: 82px;
-        text-align: center;
-        padding: 8px 10px;
+      .theme-switch {
+        position: relative;
+        width: 58px;
+        height: 32px;
+        border: none;
         border-radius: 999px;
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: #111827;
-        font-size: 0.82rem;
-        font-weight: 800;
+        cursor: pointer;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+
+      .theme-switch::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #ffffff;
+        transition: transform 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      }
+
+      body.theme-lark .theme-switch::after {
+        transform: translateX(26px);
       }
 
       .nav {
@@ -217,29 +228,18 @@
         background: var(--hero-bg);
         border: 1px solid var(--hero-border);
         border-radius: 22px;
-        padding: 24px;
+        padding: 20px 24px 18px;
         box-shadow: var(--shadow);
         margin-bottom: 22px;
       }
 
       .hero-top {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         gap: 18px;
-        align-items: flex-start;
+        align-items: center;
         flex-wrap: wrap;
-      }
-
-      .hero h2 {
-        margin: 0 0 8px;
-        font-size: 1.8rem;
-      }
-
-      .hero p {
-        margin: 0;
-        max-width: 760px;
-        color: var(--muted);
-        line-height: 1.55;
+        min-height: 42px;
       }
 
       .hero-actions {
@@ -273,7 +273,7 @@
       }
 
       .metrics {
-        margin-top: 18px;
+        margin-top: 14px;
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 14px;
@@ -295,6 +295,34 @@
       .metric-value {
         font-size: 1.45rem;
         font-weight: 800;
+      }
+
+      .metric select {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--text);
+        font-size: 1.45rem;
+        font-weight: 800;
+        padding: 0;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+      }
+
+      .metric-select-wrap {
+        position: relative;
+      }
+
+      .metric-select-wrap::after {
+        content: "▾";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.95rem;
+        color: var(--muted);
+        pointer-events: none;
       }
 
       .content-grid {
@@ -370,6 +398,18 @@
         resize: vertical;
       }
 
+      .doc-preview-panel {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .doc-preview-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        flex: 1;
+      }
+
       .doc-preview {
         background: var(--doc-bg);
         color: var(--doc-text);
@@ -396,6 +436,11 @@
         background: var(--doc-meta-bg);
         border-radius: 12px;
         padding: 10px 12px;
+      }
+
+      .preview-actions {
+        display: flex;
+        justify-content: flex-end;
       }
 
       .checklist {
@@ -482,7 +527,9 @@
       @media print {
         .sidebar,
         .hero-actions,
-        .theme-switcher {
+        .theme-switcher,
+        .preview-actions,
+        #saveDocBtn {
           display: none !important;
         }
 
@@ -543,13 +590,16 @@
         </div>
 
         <div class="theme-switcher">
-          <button class="theme-toggle" id="themeToggle" type="button">
-            <div>
-              Theme Mode
-              <small>Switch between Dark and Lark</small>
-            </div>
-            <span class="theme-pill" id="themeLabel">Dark</span>
-          </button>
+          <div class="theme-inline">
+            <span class="theme-inline-label">Theme</span>
+            <button
+              class="theme-switch"
+              id="themeToggle"
+              type="button"
+              aria-label="Toggle theme"
+              title="Toggle theme"
+            ></button>
+          </div>
         </div>
 
         <nav class="nav">
@@ -564,33 +614,34 @@
       <main class="main">
         <section class="hero">
           <div class="hero-top">
-            <div>
-              <h2>Proof of Concept</h2>
-              <p>
-                A central place for ISO F738 document control, checklist
-                execution, standards lookup, and a quick reference generator.
-                This mockup is built as a vanilla HTML/CSS/JS concept so the
-                workflow can be tested before wiring it into SharePoint, Lark,
-                or a live database.
-              </p>
-            </div>
             <div class="hero-actions">
               <button class="btn btn-primary" id="loadDemoBtn">
                 Load Demo Job
-              </button>
-              <button class="btn btn-secondary" id="exportBtn">
-                Export Preview
               </button>
             </div>
           </div>
           <div class="metrics">
             <div class="metric">
               <div class="metric-label">Active Job</div>
-              <div class="metric-value" id="metricJob">—</div>
+              <div class="metric-value metric-select-wrap">
+                <select id="heroJobSelect" aria-label="Select job number">
+                  <option value="">Select job</option>
+                  <option value="R1234">R1234</option>
+                  <option value="R2048">R2048</option>
+                  <option value="R3176">R3176</option>
+                  <option value="R4421">R4421</option>
+                  <option value="R5189">R5189</option>
+                  <option value="R6027">R6027</option>
+                  <option value="R7340">R7340</option>
+                  <option value="R8456">R8456</option>
+                  <option value="R9132">R9132</option>
+                  <option value="R9875">R9875</option>
+                </select>
+              </div>
             </div>
             <div class="metric">
               <div class="metric-label">F738 Revision</div>
-              <div class="metric-value" id="metricRev">—</div>
+              <div class="metric-value" id="metricRev">A</div>
             </div>
             <div class="metric">
               <div class="metric-label">Checklist Progress</div>
@@ -689,7 +740,8 @@
                   <input
                     id="jobNumber"
                     value=""
-                    placeholder="Enter job number"
+                    placeholder="Selected from job list"
+                    readonly
                   />
                 </div>
                 <div class="field">
@@ -724,42 +776,44 @@
                 </div>
               </div>
               <div class="hero-actions">
-                <button class="btn btn-primary" id="updatePreviewBtn">
-                  Update Preview
-                </button>
-                <button class="btn btn-secondary" id="clearFormBtn">
-                  Clear
-                </button>
+                <button class="btn btn-primary" id="saveDocBtn">Save</button>
               </div>
             </div>
 
-            <div class="panel">
+            <div class="panel doc-preview-panel">
               <h3>Document Preview</h3>
               <p class="panel-sub">
                 This simulates the clean exportable output.
               </p>
-              <div class="doc-preview" id="docPreview">
-                <h4>ISO F738</h4>
-                <div>Controlled Document Preview</div>
-                <div class="doc-meta">
-                  <div>
-                    <strong>Job:</strong> <span id="previewJob">—</span>
+              <div class="doc-preview-wrap">
+                <div class="doc-preview" id="docPreview">
+                  <h4>ISO F738</h4>
+                  <div>Controlled Document Preview</div>
+                  <div class="doc-meta">
+                    <div>
+                      <strong>Job:</strong> <span id="previewJob">—</span>
+                    </div>
+                    <div>
+                      <strong>Revision:</strong> <span id="previewRev">A</span>
+                    </div>
+                    <div>
+                      <strong>Customer:</strong>
+                      <span id="previewCustomer">—</span>
+                    </div>
+                    <div>
+                      <strong>Part:</strong> <span id="previewPart">—</span>
+                    </div>
                   </div>
-                  <div>
-                    <strong>Revision:</strong> <span id="previewRev">—</span>
-                  </div>
-                  <div>
-                    <strong>Customer:</strong>
-                    <span id="previewCustomer">—</span>
-                  </div>
-                  <div>
-                    <strong>Part:</strong> <span id="previewPart">—</span>
-                  </div>
+                  <p><strong>Scope</strong></p>
+                  <p id="previewScope">No scope entered.</p>
+                  <p><strong>Special Requirements</strong></p>
+                  <p id="previewRequirements">No requirements entered.</p>
                 </div>
-                <p><strong>Scope</strong></p>
-                <p id="previewScope">No scope entered.</p>
-                <p><strong>Special Requirements</strong></p>
-                <p id="previewRequirements">No requirements entered.</p>
+                <div class="preview-actions">
+                  <button class="btn btn-secondary" id="exportPreviewBtn">
+                    Export Preview
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -889,15 +943,106 @@
     </div>
 
     <script>
-      const demoJob = {
-        jobNumber: "26-1042",
-        customer: "Ford",
-        partName: "Console Trim Bezel",
-        revision: "C",
-        scope:
-          "Centralized ISO F738 job record for launch readiness, release tracking, and internal process visibility.",
-        requirements:
-          "Confirm document revision before release. Validate matched standards against customer-specific overrides. Export clean copy for controlled distribution.",
+      const jobList = [
+        "R1234",
+        "R2048",
+        "R3176",
+        "R4421",
+        "R5189",
+        "R6027",
+        "R7340",
+        "R8456",
+        "R9132",
+        "R9875",
+      ];
+
+      const jobDetails = {
+        R1234: {
+          customer: "Ford",
+          partName: "Console Trim Bezel",
+          revision: "C",
+          scope:
+            "Centralized ISO F738 job record for launch readiness, release tracking, and internal process visibility.",
+          requirements:
+            "Confirm document revision before release. Validate matched standards against customer-specific overrides. Export clean copy for controlled distribution.",
+        },
+        R2048: {
+          customer: "GM",
+          partName: "Door Applique",
+          revision: "B",
+          scope:
+            "Review release package for pre-build quality alignment and document completeness.",
+          requirements:
+            "Verify design package revision alignment with kickoff standards and customer notes.",
+        },
+        R3176: {
+          customer: "Ford",
+          partName: "Shifter Surround",
+          revision: "A",
+          scope: "Prepare the F738 record for engineering and quality review.",
+          requirements:
+            "Confirm initial release notes and program assumptions before signoff.",
+        },
+        R4421: {
+          customer: "Internal",
+          partName: "Core Plate Assembly",
+          revision: "D",
+          scope: "Track internal document status for plate package readiness.",
+          requirements:
+            "Use default internal controls and mark document for release review.",
+        },
+        R5189: {
+          customer: "GM",
+          partName: "Speaker Grille Tool",
+          revision: "B",
+          scope:
+            "Document controlled updates tied to customer review findings.",
+          requirements: "Ensure open issues are reflected before export.",
+        },
+        R6027: {
+          customer: "Ford",
+          partName: "Cup Holder Retainer",
+          revision: "C",
+          scope:
+            "Maintain a single source of truth for document and checklist tracking.",
+          requirements:
+            "Validate required notes and customer-specific checkpoints.",
+        },
+        R7340: {
+          customer: "Internal",
+          partName: "Latch Housing Insert",
+          revision: "A",
+          scope: "Create an initial F738 package for process review.",
+          requirements:
+            "Complete checklist and verify standards search before export.",
+        },
+        R8456: {
+          customer: "GM",
+          partName: "Instrument Panel Clip",
+          revision: "E",
+          scope:
+            "Control the current revision state and support launch package preparation.",
+          requirements:
+            "Check release history and update all notes tied to quality findings.",
+        },
+        R9132: {
+          customer: "Ford",
+          partName: "Map Pocket Trim",
+          revision: "B",
+          scope:
+            "Support quick access to the job, standards, and checklist in one place.",
+          requirements:
+            "Confirm standards match customer and category before final release.",
+        },
+        R9875: {
+          customer: "Internal",
+          partName: "Slide Core Plate",
+          revision: "C",
+          scope:
+            "Keep the controlled record ready for engineering handoff and export.",
+          requirements:
+            "Verify document revision and required internal approval notes.",
+        },
       };
 
       const checklistData = [
@@ -948,7 +1093,7 @@
       const sections = document.querySelectorAll(".section");
       const navButtons = document.querySelectorAll(".nav button");
       const themeToggle = document.getElementById("themeToggle");
-      const themeLabel = document.getElementById("themeLabel");
+      const heroJobSelect = document.getElementById("heroJobSelect");
 
       navButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -962,7 +1107,6 @@
       function applyTheme(theme) {
         const isLark = theme === "lark";
         document.body.classList.toggle("theme-lark", isLark);
-        themeLabel.textContent = isLark ? "Lark" : "Dark";
         localStorage.setItem(THEME_KEY, isLark ? "lark" : "dark");
       }
 
@@ -978,12 +1122,12 @@
           const row = document.createElement("label");
           row.className = "check-item";
           row.innerHTML = `
-          <input type="checkbox" data-index="${index}" />
-          <div>
-            <strong>Step ${index + 1}</strong>
-            <div>${item}</div>
-          </div>
-        `;
+                      <input type="checkbox" data-index="${index}" />
+                      <div>
+                        <strong>Step ${index + 1}</strong>
+                        <div>${item}</div>
+                      </div>
+                    `;
           wrap.appendChild(row);
         });
 
@@ -1003,14 +1147,23 @@
         document.getElementById("metricChecklist").textContent = pct + "%";
       }
 
-      function loadJob(job) {
-        document.getElementById("jobNumber").value = job.jobNumber;
+      function loadJobByNumber(jobNumber) {
+        const job = jobDetails[jobNumber];
+        if (!job) return;
+
+        document.getElementById("jobNumber").value = jobNumber;
         document.getElementById("customer").value = job.customer;
         document.getElementById("partName").value = job.partName;
         document.getElementById("docRev").value = job.revision;
         document.getElementById("scope").value = job.scope;
         document.getElementById("requirements").value = job.requirements;
         updatePreview();
+      }
+
+      function loadDemoJob() {
+        const demoJobNumber = jobList[0];
+        heroJobSelect.value = demoJobNumber;
+        loadJobByNumber(demoJobNumber);
       }
 
       function updatePreview() {
@@ -1031,22 +1184,11 @@
         document.getElementById("previewScope").textContent = scope;
         document.getElementById("previewRequirements").textContent = req;
 
-        document.getElementById("metricJob").textContent = job;
-        document.getElementById("metricRev").textContent = rev;
-      }
+        if (heroJobSelect.value !== job && jobList.includes(job)) {
+          heroJobSelect.value = job;
+        }
 
-      function clearForm() {
-        [
-          "jobNumber",
-          "customer",
-          "partName",
-          "docRev",
-          "scope",
-          "requirements",
-        ].forEach((id) => {
-          document.getElementById(id).value = "";
-        });
-        updatePreview();
+        document.getElementById("metricRev").textContent = rev;
       }
 
       function runSearch() {
@@ -1065,13 +1207,13 @@
           const card = document.createElement("div");
           card.className = "mini-card";
           card.innerHTML = `
-          <div class="tag">${item.customer} • ${item.category}</div>
-          <strong>${item.title}</strong>
-          <p>${item.text}</p>
-          <div style="margin-top:10px;">
-            <button class="btn btn-secondary" data-title="${item.title}">Add to Quick Reference</button>
-          </div>
-        `;
+                      <div class="tag">${item.customer} • ${item.category}</div>
+                      <strong>${item.title}</strong>
+                      <p>${item.text}</p>
+                      <div style="margin-top:10px;">
+                        <button class="btn btn-secondary" data-title="${item.title}">Add to Quick Reference</button>
+                      </div>
+                    `;
           results.appendChild(card);
         });
 
@@ -1131,19 +1273,15 @@
           lines.push(`   ${item.text}`);
         });
 
-        document.getElementById("quickRefOutput").textContent =
-          lines.join("\n");
+        document.getElementById("quickRefOutput").textContent = lines.join("");
       }
 
       document
         .getElementById("loadDemoBtn")
-        .addEventListener("click", () => loadJob(demoJob));
+        .addEventListener("click", loadDemoJob);
       document
-        .getElementById("updatePreviewBtn")
+        .getElementById("saveDocBtn")
         .addEventListener("click", updatePreview);
-      document
-        .getElementById("clearFormBtn")
-        .addEventListener("click", clearForm);
       document
         .getElementById("runSearchBtn")
         .addEventListener("click", runSearch);
@@ -1151,8 +1289,12 @@
         .getElementById("generateQuickRefBtn")
         .addEventListener("click", generateQuickRef);
       document
-        .getElementById("exportBtn")
+        .getElementById("exportPreviewBtn")
         .addEventListener("click", () => window.print());
+
+      heroJobSelect.addEventListener("change", (event) => {
+        loadJobByNumber(event.target.value);
+      });
 
       themeToggle.addEventListener("click", () => {
         const nextTheme = document.body.classList.contains("theme-lark")
