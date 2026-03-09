@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISO Hub POC</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: #121a2b;
+        --panel-2: #172238;
+        --border: #2a3957;
+        --text: #e8eefc;
+        --muted: #9db0d3;
+        --accent: #f59e0b;
+        --accent-2: #ffbe3d;
+        --success: #10b981;
+        --danger: #ef4444;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          Segoe UI,
+          Arial,
+          sans-serif;
+        background: linear-gradient(180deg, #08101d 0%, #0f172a 100%);
+        color: var(--text);
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        background: rgba(9, 14, 26, 0.95);
+        border-right: 1px solid var(--border);
+        padding: 24px 18px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), #b45309);
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #111827;
+        box-shadow: var(--shadow);
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+
+      .brand p {
+        margin: 3px 0 0;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+
+      .nav {
+        display: grid;
+        gap: 10px;
+      }
+
+      .nav button {
+        width: 100%;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--text);
+        padding: 12px 14px;
+        border-radius: 14px;
+        text-align: left;
+        cursor: pointer;
+        font-size: 0.96rem;
+        transition: 0.2s ease;
+      }
+
+      .nav button:hover,
+      .nav button.active {
+        background: var(--panel);
+        border-color: var(--border);
+      }
+
+      .main {
+        padding: 26px;
+      }
+
+      .hero {
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.16),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid rgba(245, 158, 11, 0.22);
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        margin-bottom: 22px;
+      }
+
+      .hero-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .hero h2 {
+        margin: 0 0 8px;
+        font-size: 1.8rem;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 760px;
+        color: #d7e3ff;
+        line-height: 1.55;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-weight: 700;
+        transition: 0.2s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #1f2937;
+      }
+
+      .btn-secondary {
+        background: #1a2439;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .metrics {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .metric {
+        background: rgba(9, 15, 27, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .metric-label {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .metric-value {
+        font-size: 1.45rem;
+        font-weight: 800;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 22px;
+      }
+
+      .panel {
+        background: rgba(18, 26, 43, 0.94);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .panel h3 {
+        margin: 0 0 6px;
+        font-size: 1.15rem;
+      }
+
+      .panel-sub {
+        color: var(--muted);
+        margin: 0 0 18px;
+        line-height: 1.5;
+        font-size: 0.94rem;
+      }
+
+      .section {
+        display: none;
+      }
+      .section.active {
+        display: block;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        background: #0d1526;
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 12px 13px;
+        border-radius: 12px;
+        outline: none;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .doc-preview {
+        background: linear-gradient(180deg, #fff 0%, #f5f7fb 100%);
+        color: #1f2937;
+        border-radius: 18px;
+        padding: 22px;
+        min-height: 420px;
+        border: 1px solid #d7deea;
+      }
+
+      .doc-preview h4 {
+        margin: 0 0 4px;
+        font-size: 1.25rem;
+      }
+
+      .doc-meta {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin: 18px 0;
+        font-size: 0.92rem;
+      }
+
+      .doc-meta div {
+        background: #eef2f8;
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .checklist {
+        display: grid;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .check-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        background: #0d1526;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 13px;
+      }
+
+      .check-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+      }
+
+      .mini-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mini-card {
+        background: #0d1526;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .mini-card strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .mini-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+
+      .search-results {
+        display: grid;
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        background: rgba(245, 158, 11, 0.14);
+        color: #ffd48c;
+        border: 1px solid rgba(245, 158, 11, 0.22);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .quick-ref {
+        background: #0d1526;
+        border: 1px dashed #4a5f88;
+        border-radius: 14px;
+        padding: 14px;
+        margin-top: 12px;
+      }
+
+      .quick-ref pre {
+        white-space: pre-wrap;
+        margin: 0;
+        font: inherit;
+        color: #dce8ff;
+        line-height: 1.55;
+      }
+
+      @media (max-width: 1080px) {
+        .metrics,
+        .content-grid,
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 840px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: static;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .main {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">R</div>
+          <div>
+            <h1>REDO Document Hub</h1>
+            <p>ISO • Checklists • Standards</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="active" data-section="dashboard">Dashboard</button>
+          <button data-section="f738">ISO Document Hub</button>
+          <button data-section="checklist">Checklist</button>
+          <button data-section="standards">Standards Search</button>
+          <button data-section="quickref">Quick Reference Generator</button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <section class="hero">
+          <div class="hero-top">
+            <div>
+              <h2>Proof of Concept</h2>
+              <p>
+                A central place for ISO F738 document control, checklist
+                execution, standards lookup, and a quick reference generator.
+                This mockup is built as a vanilla HTML/CSS/JS concept so the
+                workflow can be tested before wiring it into SharePoint, Lark,
+                or a live database.
+              </p>
+            </div>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="loadDemoBtn">
+                Load Demo Job
+              </button>
+              <button class="btn btn-secondary" id="exportBtn">
+                Export Preview
+              </button>
+            </div>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">Active Job</div>
+              <div class="metric-value" id="metricJob">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">F738 Revision</div>
+              <div class="metric-value" id="metricRev">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Checklist Progress</div>
+              <div class="metric-value" id="metricChecklist">0%</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Matched Standards</div>
+              <div class="metric-value" id="metricStandards">0</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="dashboard" class="section active">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Workflow Overview</h3>
+              <p class="panel-sub">
+                This would be the landing page for a coordinator, engineer, or
+                quality lead. The idea is one job number drives everything else.
+              </p>
+              <div class="mini-list">
+                <div class="mini-card">
+                  <strong>1. Load Job</strong>
+                  <p>
+                    Search or enter a job number. Pull customer, part, revision,
+                    and due date from your source system.
+                  </p>
+                </div>
+                <div class="mini-card">
+                  <strong>2. Build / Update F738</strong>
+                  <p>
+                    Open the controlled F738 record, edit approved fields, and
+                    export a clean output for release.
+                  </p>
+                </div>
+                <div class="mini-card">
+                  <strong>3. Complete Checklist</strong>
+                  <p>
+                    Track the actual quality/process checklist against the same
+                    job so nothing is split across systems.
+                  </p>
+                </div>
+                <div class="mini-card">
+                  <strong>4. Pull Standards + Quick Reference</strong>
+                  <p>
+                    Search standards by customer/category and generate a
+                    condensed quick-reference sheet for the team.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Suggested MVP Scope</h3>
+              <p class="panel-sub">
+                Start small, prove the workflow, then connect live data later.
+              </p>
+              <div class="mini-list">
+                <div class="mini-card">
+                  <strong>Job Search</strong>
+                  <p>Manual input box with demo data first.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>F738 Form</strong>
+                  <p>Editable fields tied to one preview/exportable record.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>Checklist</strong>
+                  <p>Simple completion tracking with notes.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>Standards</strong>
+                  <p>Mock standards search with category filtering.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>Quick Reference</strong>
+                  <p>Generate a summary block from selected standards.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="f738" class="section">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>F738 Document Hub</h3>
+              <p class="panel-sub">
+                Controlled entry for the ISO F738-style document. In a real
+                version, this would be driven by the job number and revision
+                rules.
+              </p>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="jobNumber">Job Number</label>
+                  <input
+                    id="jobNumber"
+                    value=""
+                    placeholder="Enter job number"
+                  />
+                </div>
+                <div class="field">
+                  <label for="customer">Customer</label>
+                  <input id="customer" value="" placeholder="Customer name" />
+                </div>
+                <div class="field">
+                  <label for="partName">Part / Program</label>
+                  <input
+                    id="partName"
+                    value=""
+                    placeholder="Part or program name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="docRev">Document Revision</label>
+                  <input id="docRev" value="A" placeholder="Revision" />
+                </div>
+                <div class="field full">
+                  <label for="scope">Scope / Description</label>
+                  <textarea
+                    id="scope"
+                    placeholder="Describe scope of work or purpose of the document"
+                  ></textarea>
+                </div>
+                <div class="field full">
+                  <label for="requirements">Special Requirements / Notes</label>
+                  <textarea
+                    id="requirements"
+                    placeholder="Critical requirements, customer instructions, or ISO notes"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="updatePreviewBtn">
+                  Update Preview
+                </button>
+                <button class="btn btn-secondary" id="clearFormBtn">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Document Preview</h3>
+              <p class="panel-sub">
+                This simulates the clean exportable output.
+              </p>
+              <div class="doc-preview" id="docPreview">
+                <h4>ISO F738</h4>
+                <div>Controlled Document Preview</div>
+                <div class="doc-meta">
+                  <div>
+                    <strong>Job:</strong> <span id="previewJob">—</span>
+                  </div>
+                  <div>
+                    <strong>Revision:</strong> <span id="previewRev">—</span>
+                  </div>
+                  <div>
+                    <strong>Customer:</strong>
+                    <span id="previewCustomer">—</span>
+                  </div>
+                  <div>
+                    <strong>Part:</strong> <span id="previewPart">—</span>
+                  </div>
+                </div>
+                <p><strong>Scope</strong></p>
+                <p id="previewScope">No scope entered.</p>
+                <p><strong>Special Requirements</strong></p>
+                <p id="previewRequirements">No requirements entered.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="checklist" class="section">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Job Checklist</h3>
+              <p class="panel-sub">
+                A single checklist tied to the job and document. Great for
+                proving out the central workflow.
+              </p>
+              <div class="checklist" id="checklistItems"></div>
+            </div>
+            <div class="panel">
+              <h3>Checklist Notes</h3>
+              <p class="panel-sub">
+                Could later become per-item notes, required evidence, or
+                sign-off fields.
+              </p>
+              <div class="field">
+                <label for="checklistNotes">General Notes</label>
+                <textarea
+                  id="checklistNotes"
+                  placeholder="Enter checklist notes here..."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="standards" class="section">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Standards Search</h3>
+              <p class="panel-sub">
+                Search customer or internal standards and quickly see what
+                applies to the job.
+              </p>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="standardsCustomer">Customer</label>
+                  <select id="standardsCustomer">
+                    <option value="all">All Customers</option>
+                    <option value="Ford">Ford</option>
+                    <option value="GM">GM</option>
+                    <option value="Internal">Internal / Default</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="standardsCategory">Category</label>
+                  <select id="standardsCategory">
+                    <option value="all">All Categories</option>
+                    <option value="Plates">Plates</option>
+                    <option value="Cooling">Cooling</option>
+                    <option value="Engraving">Engraving</option>
+                    <option value="Documentation">Documentation</option>
+                  </select>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="runSearchBtn">
+                  Run Search
+                </button>
+              </div>
+              <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Selected Standards</h3>
+              <p class="panel-sub">
+                This is where your user would see what got matched and selected
+                for the quick reference output.
+              </p>
+              <div id="selectedStandards" class="mini-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="quickref" class="section">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Quick Reference Generator</h3>
+              <p class="panel-sub">
+                Build a condensed reference sheet from the matched standards for
+                the shop floor, design team, or kickoff package.
+              </p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="generateQuickRefBtn">
+                  Generate Quick Reference
+                </button>
+              </div>
+              <div class="quick-ref">
+                <pre id="quickRefOutput">No quick reference generated yet.</pre>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>What This Could Become</h3>
+              <p class="panel-sub">
+                After the proof of concept, this area could output a PDF,
+                structured handoff sheet, or synced record back to your central
+                system.
+              </p>
+              <div class="mini-list">
+                <div class="mini-card">
+                  <strong>Export</strong>
+                  <p>PDF, print, or controlled release output.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>Revision Control</strong>
+                  <p>Track generated reference sheets by job and revision.</p>
+                </div>
+                <div class="mini-card">
+                  <strong>Department Views</strong>
+                  <p>
+                    Separate output blocks for design, machining, mold making,
+                    handwork, and QA.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const demoJob = {
+        jobNumber: "26-1042",
+        customer: "Ford",
+        partName: "Console Trim Bezel",
+        revision: "C",
+        scope:
+          "Centralized ISO F738 job record for launch readiness, release tracking, and internal process visibility.",
+        requirements:
+          "Confirm document revision before release. Validate matched standards against customer-specific overrides. Export clean copy for controlled distribution.",
+      };
+
+      const checklistData = [
+        "Verify latest customer data is loaded",
+        "Confirm F738 revision is current",
+        "Review special requirements with program owner",
+        "Validate standards match for customer and category",
+        "Generate quick reference output",
+        "Export or release approved document",
+      ];
+
+      const standards = [
+        {
+          customer: "Ford",
+          category: "Plates",
+          title: "Plate Engraving Standard",
+          text: "Engrave plate identification on operator side with approved text height and depth.",
+        },
+        {
+          customer: "Ford",
+          category: "Cooling",
+          title: "Cooling Circuit Marking",
+          text: "All cooling lines must be clearly identified and match release documentation.",
+        },
+        {
+          customer: "GM",
+          category: "Documentation",
+          title: "Launch Package Requirement",
+          text: "Include revision table and customer-specific quality notes in the kickoff package.",
+        },
+        {
+          customer: "Internal",
+          category: "Documentation",
+          title: "Default ISO Release Rule",
+          text: "All documents require date, owner, and revision before export.",
+        },
+        {
+          customer: "Internal",
+          category: "Engraving",
+          title: "Internal Marking Practice",
+          text: "Mark inserts and plates consistently for handoff clarity and maintenance reference.",
+        },
+      ];
+
+      const selected = [];
+
+      const sections = document.querySelectorAll(".section");
+      const navButtons = document.querySelectorAll(".nav button");
+
+      navButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          navButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          sections.forEach((section) => section.classList.remove("active"));
+          document.getElementById(btn.dataset.section).classList.add("active");
+        });
+      });
+
+      function renderChecklist() {
+        const wrap = document.getElementById("checklistItems");
+        wrap.innerHTML = "";
+        checklistData.forEach((item, index) => {
+          const row = document.createElement("label");
+          row.className = "check-item";
+          row.innerHTML = `
+          <input type="checkbox" data-index="${index}" />
+          <div>
+            <strong>Step ${index + 1}</strong>
+            <div>${item}</div>
+          </div>
+        `;
+          wrap.appendChild(row);
+        });
+
+        wrap.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+          box.addEventListener("change", updateChecklistMetric);
+        });
+      }
+
+      function updateChecklistMetric() {
+        const total = document.querySelectorAll(
+          '#checklistItems input[type="checkbox"]',
+        ).length;
+        const checked = document.querySelectorAll(
+          '#checklistItems input[type="checkbox"]:checked',
+        ).length;
+        const pct = total ? Math.round((checked / total) * 100) : 0;
+        document.getElementById("metricChecklist").textContent = pct + "%";
+      }
+
+      function loadJob(job) {
+        document.getElementById("jobNumber").value = job.jobNumber;
+        document.getElementById("customer").value = job.customer;
+        document.getElementById("partName").value = job.partName;
+        document.getElementById("docRev").value = job.revision;
+        document.getElementById("scope").value = job.scope;
+        document.getElementById("requirements").value = job.requirements;
+        updatePreview();
+      }
+
+      function updatePreview() {
+        const job = document.getElementById("jobNumber").value || "—";
+        const customer = document.getElementById("customer").value || "—";
+        const part = document.getElementById("partName").value || "—";
+        const rev = document.getElementById("docRev").value || "—";
+        const scope =
+          document.getElementById("scope").value || "No scope entered.";
+        const req =
+          document.getElementById("requirements").value ||
+          "No requirements entered.";
+
+        document.getElementById("previewJob").textContent = job;
+        document.getElementById("previewCustomer").textContent = customer;
+        document.getElementById("previewPart").textContent = part;
+        document.getElementById("previewRev").textContent = rev;
+        document.getElementById("previewScope").textContent = scope;
+        document.getElementById("previewRequirements").textContent = req;
+
+        document.getElementById("metricJob").textContent = job;
+        document.getElementById("metricRev").textContent = rev;
+      }
+
+      function clearForm() {
+        [
+          "jobNumber",
+          "customer",
+          "partName",
+          "docRev",
+          "scope",
+          "requirements",
+        ].forEach((id) => {
+          document.getElementById(id).value = "";
+        });
+        updatePreview();
+      }
+
+      function runSearch() {
+        const customer = document.getElementById("standardsCustomer").value;
+        const category = document.getElementById("standardsCategory").value;
+        const matches = standards.filter((item) => {
+          const customerOk = customer === "all" || item.customer === customer;
+          const categoryOk = category === "all" || item.category === category;
+          return customerOk && categoryOk;
+        });
+
+        const results = document.getElementById("searchResults");
+        results.innerHTML = "";
+
+        matches.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "mini-card";
+          card.innerHTML = `
+          <div class="tag">${item.customer} • ${item.category}</div>
+          <strong>${item.title}</strong>
+          <p>${item.text}</p>
+          <div style="margin-top:10px;">
+            <button class="btn btn-secondary" data-title="${item.title}">Add to Quick Reference</button>
+          </div>
+        `;
+          results.appendChild(card);
+        });
+
+        document.getElementById("metricStandards").textContent = matches.length;
+
+        results.querySelectorAll("button[data-title]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const record = matches.find((x) => x.title === btn.dataset.title);
+            if (record && !selected.find((x) => x.title === record.title)) {
+              selected.push(record);
+              renderSelected();
+            }
+          });
+        });
+      }
+
+      function renderSelected() {
+        const wrap = document.getElementById("selectedStandards");
+        wrap.innerHTML = "";
+
+        if (!selected.length) {
+          wrap.innerHTML =
+            '<div class="mini-card"><strong>No selections yet</strong><p>Run a standards search and add items for the quick reference output.</p></div>';
+          return;
+        }
+
+        selected.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "mini-card";
+          card.innerHTML = `<strong>${item.title}</strong><p>${item.customer} • ${item.category}<br>${item.text}</p>`;
+          wrap.appendChild(card);
+        });
+      }
+
+      function generateQuickRef() {
+        const job = document.getElementById("jobNumber").value || "TBD";
+        const customer = document.getElementById("customer").value || "TBD";
+        const part = document.getElementById("partName").value || "TBD";
+
+        if (!selected.length) {
+          document.getElementById("quickRefOutput").textContent =
+            "No selected standards yet. Run a standards search and add at least one item.";
+          return;
+        }
+
+        const lines = [
+          `QUICK REFERENCE SHEET`,
+          `Job: ${job}`,
+          `Customer: ${customer}`,
+          `Part: ${part}`,
+          "",
+          "Matched Standards:",
+        ];
+
+        selected.forEach((item, i) => {
+          lines.push(`${i + 1}. [${item.category}] ${item.title}`);
+          lines.push(`   ${item.text}`);
+        });
+
+        document.getElementById("quickRefOutput").textContent =
+          lines.join("\n");
+      }
+
+      document
+        .getElementById("loadDemoBtn")
+        .addEventListener("click", () => loadJob(demoJob));
+      document
+        .getElementById("updatePreviewBtn")
+        .addEventListener("click", updatePreview);
+      document
+        .getElementById("clearFormBtn")
+        .addEventListener("click", clearForm);
+      document
+        .getElementById("runSearchBtn")
+        .addEventListener("click", runSearch);
+      document
+        .getElementById("generateQuickRefBtn")
+        .addEventListener("click", generateQuickRef);
+      document
+        .getElementById("exportBtn")
+        .addEventListener("click", () => window.print());
+
+      renderChecklist();
+      renderSelected();
+      updatePreview();
+    </script>
+  </body>
+</html>
