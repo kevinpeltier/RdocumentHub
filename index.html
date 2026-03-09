@@ -843,6 +843,166 @@
         flex-wrap: wrap;
       }
 
+      .workorder-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .workorder-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .workorder-section-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workorder-field-grid {
+        margin-bottom: 0;
+      }
+
+      .workorder-field-grid textarea {
+        min-height: 72px;
+      }
+
+      .workorder-preview-sheet {
+        background: #ffffff;
+        color: #111827;
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #d1d5db;
+        margin-top: 14px;
+      }
+
+      .workorder-preview-sheet * {
+        color: #111827;
+      }
+
+      .workorder-preview-note {
+        text-align: right;
+        font-size: 0.78rem;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+
+      .workorder-preview-header {
+        display: grid;
+        grid-template-columns: 1.5fr 0.9fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .workorder-preview-brand {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .workorder-preview-logo {
+        width: 60px;
+        height: 60px;
+        border: 2px solid #c59a1a;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: #f9f4df;
+        font-weight: 900;
+        text-transform: lowercase;
+      }
+
+      .workorder-preview-company-line {
+        font-size: 0.78rem;
+        margin-bottom: 6px;
+      }
+
+      .workorder-preview-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        margin: 0 0 2px;
+      }
+
+      .workorder-preview-subtitle {
+        font-size: 0.94rem;
+        margin: 0;
+      }
+
+      .workorder-preview-job-box {
+        border: 2px solid #111827;
+      }
+
+      .workorder-preview-job-row {
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        border-bottom: 1px solid #111827;
+      }
+
+      .workorder-preview-job-row:last-child {
+        border-bottom: none;
+      }
+
+      .workorder-preview-job-label,
+      .workorder-preview-job-value {
+        padding: 10px 12px;
+        font-weight: 700;
+      }
+
+      .workorder-preview-job-label {
+        background: #eef2f7;
+      }
+
+      .workorder-preview-job-value.highlight {
+        color: #d11f1f;
+      }
+
+      .workorder-preview-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+        table-layout: fixed;
+      }
+
+      .workorder-preview-table td {
+        border: 1px solid #111827;
+        padding: 7px 8px;
+        vertical-align: top;
+        font-size: 0.84rem;
+        line-height: 1.35;
+        word-wrap: break-word;
+      }
+
+      .workorder-preview-label {
+        background: #dce6f1;
+        font-weight: 700;
+        text-align: right;
+        color: #204d74;
+      }
+
+      .workorder-preview-label.orange {
+        background: #c65d0a;
+        color: #ffffff;
+      }
+
+      .workorder-preview-value {
+        background: #ffffff;
+        font-weight: 600;
+        white-space: pre-wrap;
+      }
+
+      .workorder-preview-value.large {
+        font-size: 0.98rem;
+        font-weight: 800;
+      }
+
       @media print {
         .sidebar,
         .hero-actions,
@@ -850,7 +1010,8 @@
         .preview-actions,
         #saveDocBtn,
         .modal-header,
-        .modal-footer {
+        .modal-footer,
+        .workorder-header .hero-actions {
           display: none !important;
         }
 
@@ -885,7 +1046,8 @@
         .metrics,
         .content-grid,
         .field-grid,
-        .checklist-card-grid {
+        .checklist-card-grid,
+        .workorder-preview-header {
           grid-template-columns: 1fr;
         }
       }
@@ -944,7 +1106,7 @@
 
         <nav class="nav">
           <button class="active" data-section="dashboard">Dashboard</button>
-          <button data-section="f738">ISO Document Hub</button>
+          <button data-section="f738">Work Orders</button>
           <button data-section="checklist">Checklist</button>
           <button data-section="standards">Standards Search</button>
           <button data-section="quickref">Quick Reference Generator</button>
@@ -1066,17 +1228,28 @@
         </section>
 
         <section id="f738" class="section">
-          <div class="content-grid">
-            <div class="panel">
-              <h3>F738 Document Hub</h3>
-              <p class="panel-sub">
-                Controlled entry for the ISO F738-style document. In a real
-                version, this would be driven by the job number and revision
-                rules.
-              </p>
-              <div class="field-grid">
+          <div class="panel">
+            <div class="workorder-header">
+              <div>
+                <h3>Work Orders</h3>
+                <p class="panel-sub">
+                  Customer requirements and approval form entry based on the
+                  F738-style layout.
+                </p>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-secondary" id="openWorkOrderPreviewBtn">
+                  Preview Form
+                </button>
+                <button class="btn btn-primary" id="saveDocBtn">Save</button>
+              </div>
+            </div>
+
+            <div class="workorder-grid">
+              <div class="workorder-section-title">Header Information</div>
+              <div class="field-grid workorder-field-grid">
                 <div class="field">
-                  <label for="jobNumber">Job Number</label>
+                  <label for="jobNumber">Job #</label>
                   <input
                     id="jobNumber"
                     value=""
@@ -1085,74 +1258,289 @@
                   />
                 </div>
                 <div class="field">
-                  <label for="customer">Customer</label>
-                  <input id="customer" value="" placeholder="Customer name" />
+                  <label for="pmName">PM</label>
+                  <input id="pmName" placeholder="Project manager name" />
                 </div>
                 <div class="field">
-                  <label for="partName">Part / Program</label>
+                  <label for="pmPhone">PM Phone</label>
+                  <input id="pmPhone" placeholder="Phone number" />
+                </div>
+                <div class="field">
+                  <label for="docRev">Rev #</label>
+                  <input id="docRev" value="A" placeholder="Revision" />
+                </div>
+              </div>
+
+              <div class="workorder-section-title">Program & Customer</div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="partName">Program / Part</label>
                   <input
                     id="partName"
                     value=""
-                    placeholder="Part or program name"
+                    placeholder="Program or part name"
                   />
                 </div>
                 <div class="field">
-                  <label for="docRev">Document Revision</label>
-                  <input id="docRev" value="A" placeholder="Revision" />
+                  <label for="customerMold">Customer Mold #</label>
+                  <input id="customerMold" placeholder="Customer mold number" />
                 </div>
-                <div class="field full">
-                  <label for="scope">Scope / Description</label>
+                <div class="field">
+                  <label for="customer">Customer Name</label>
+                  <input id="customer" value="" placeholder="Customer name" />
+                </div>
+                <div class="field">
+                  <label for="contactName">Contact</label>
+                  <input id="contactName" placeholder="Contact name" />
+                </div>
+                <div class="field">
+                  <label for="quoteNumber">Quote #</label>
+                  <input id="quoteNumber" placeholder="Quote number" />
+                </div>
+                <div class="field">
+                  <label for="customerStandardsFile"
+                    >Customer Standards File</label
+                  >
+                  <input
+                    id="customerStandardsFile"
+                    placeholder="Standards file / reference"
+                  />
+                </div>
+                <div class="field">
+                  <label for="partNumber">Part #</label>
                   <textarea
-                    id="scope"
-                    placeholder="Describe scope of work or purpose of the document"
+                    id="partNumber"
+                    placeholder="Part number(s)"
                   ></textarea>
                 </div>
-                <div class="field full">
-                  <label for="requirements">Special Requirements / Notes</label>
-                  <textarea
-                    id="requirements"
-                    placeholder="Critical requirements, customer instructions, or ISO notes"
-                  ></textarea>
+                <div class="field">
+                  <label for="modelYear">Model Year</label>
+                  <input id="modelYear" placeholder="Model year" />
+                </div>
+                <div class="field">
+                  <label for="startDate">Start Date</label>
+                  <input id="startDate" placeholder="YYYY-MM-DD" />
+                </div>
+                <div class="field">
+                  <label for="weeksAfterSteel"
+                    ># Weeks after steel purchase to T1</label
+                  >
+                  <input id="weeksAfterSteel" placeholder="Weeks" />
                 </div>
               </div>
-              <div class="hero-actions">
-                <button class="btn btn-primary" id="saveDocBtn">Save</button>
-              </div>
-            </div>
 
-            <div class="panel doc-preview-panel">
-              <h3>Document Preview</h3>
-              <p class="panel-sub">
-                This simulates the clean exportable output.
-              </p>
-              <div class="doc-preview-wrap">
-                <div class="doc-preview" id="docPreview">
-                  <h4>ISO F738</h4>
-                  <div>Controlled Document Preview</div>
-                  <div class="doc-meta">
-                    <div>
-                      <strong>Job:</strong> <span id="previewJob">—</span>
-                    </div>
-                    <div>
-                      <strong>Revision:</strong> <span id="previewRev">A</span>
-                    </div>
-                    <div>
-                      <strong>Customer:</strong>
-                      <span id="previewCustomer">—</span>
-                    </div>
-                    <div>
-                      <strong>Part:</strong> <span id="previewPart">—</span>
-                    </div>
-                  </div>
-                  <p><strong>Scope</strong></p>
-                  <p id="previewScope">No scope entered.</p>
-                  <p><strong>Special Requirements</strong></p>
-                  <p id="previewRequirements">No requirements entered.</p>
+              <div class="workorder-section-title">
+                Tool Build & Steel Requirements
+              </div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="cavities"># of Cavities</label>
+                  <input id="cavities" placeholder="e.g. LH + 1RH" />
                 </div>
-                <div class="preview-actions">
-                  <button class="btn btn-secondary" id="exportPreviewBtn">
-                    Export Preview
-                  </button>
+                <div class="field">
+                  <label for="toolBuildUnits">Tool Build Units</label>
+                  <input id="toolBuildUnits" placeholder="Metric / Imperial" />
+                </div>
+                <div class="field">
+                  <label for="productionQty">Production Qty</label>
+                  <input id="productionQty" placeholder="e.g. 14000 per year" />
+                </div>
+                <div class="field">
+                  <label for="cavitySteel">Cavity Steel</label>
+                  <input id="cavitySteel" placeholder="Steel specification" />
+                </div>
+                <div class="field">
+                  <label for="coreSteel">Core Steel</label>
+                  <input id="coreSteel" placeholder="Steel specification" />
+                </div>
+                <div class="field">
+                  <label for="cavitySize">Cavity Size</label>
+                  <input id="cavitySize" placeholder="Size" />
+                </div>
+                <div class="field">
+                  <label for="coreSize">Core Size</label>
+                  <input id="coreSize" placeholder="Size" />
+                </div>
+              </div>
+
+              <div class="workorder-section-title">Quoted Mechanisms</div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="lifters">Lifters</label>
+                  <textarea
+                    id="lifters"
+                    placeholder="Quoted lifters"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="slides">Slides</label>
+                  <textarea id="slides" placeholder="Quoted slides"></textarea>
+                </div>
+                <div class="field">
+                  <label for="hookSlides">Hook Slides</label>
+                  <textarea
+                    id="hookSlides"
+                    placeholder="Hook slides"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="retractors">Retractors</label>
+                  <textarea id="retractors" placeholder="Retractors"></textarea>
+                </div>
+                <div class="field full">
+                  <label for="inserts">Inserts</label>
+                  <textarea
+                    id="inserts"
+                    placeholder="Insert details"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="workorder-section-title">Press Specifications</div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="machineTonnage">Machine Type & Tonnage</label>
+                  <input id="machineTonnage" placeholder="e.g. 1450 ton" />
+                </div>
+                <div class="field">
+                  <label for="plantLocation">Press # & Plant Location</label>
+                  <input id="plantLocation" placeholder="Location" />
+                </div>
+                <div class="field">
+                  <label for="tryoutPress">Tryout Press Location & Size</label>
+                  <input id="tryoutPress" placeholder="Location and size" />
+                </div>
+                <div class="field">
+                  <label for="pressNotes">Press Notes</label>
+                  <textarea
+                    id="pressNotes"
+                    placeholder="Press notes"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="workorder-section-title">Runner System</div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="runnerDesign">Runner Design & Size</label>
+                  <textarea
+                    id="runnerDesign"
+                    placeholder="Runner design and size"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="gateType">Gate Type & Size</label>
+                  <textarea
+                    id="gateType"
+                    placeholder="Gate type and size"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="manifoldSupplier">Manifold Supplier</label>
+                  <textarea
+                    id="manifoldSupplier"
+                    placeholder="Supplier"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="sphericalRad">Spherical Rad & Orifice</label>
+                  <textarea id="sphericalRad" placeholder="Details"></textarea>
+                </div>
+                <div class="field full">
+                  <label for="manifoldSpares">Manifold Spares Required</label>
+                  <input id="manifoldSpares" placeholder="Yes / No / details" />
+                </div>
+              </div>
+
+              <div class="workorder-section-title">
+                Ejection / Material / Special Mold
+              </div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="ejectionPins"
+                    >Ejection Pins / Lifters / Blades / Air</label
+                  >
+                  <textarea
+                    id="ejectionPins"
+                    placeholder="Ejection details"
+                  ></textarea>
+                </div>
+                <div class="field">
+                  <label for="ejectionStyle">Ejection Style</label>
+                  <input id="ejectionStyle" placeholder="Style" />
+                </div>
+                <div class="field full">
+                  <label for="ejectionNotes">Ejection Notes</label>
+                  <textarea id="ejectionNotes" placeholder="Notes"></textarea>
+                </div>
+                <div class="field">
+                  <label for="materialColour">Material Colour</label>
+                  <input id="materialColour" placeholder="Colour" />
+                </div>
+                <div class="field">
+                  <label for="materialType">Material Type</label>
+                  <input id="materialType" placeholder="Type" />
+                </div>
+                <div class="field">
+                  <label for="shrink">Shrink</label>
+                  <input id="shrink" placeholder="Shrink value" />
+                </div>
+                <div class="field">
+                  <label for="cycleTime">Special Mold / Cycle Time</label>
+                  <input id="cycleTime" placeholder="Cycle time" />
+                </div>
+                <div class="field full">
+                  <label for="moldNotes">Notes</label>
+                  <textarea
+                    id="moldNotes"
+                    placeholder="Special notes"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="workorder-section-title">Moldflow / Finish</div>
+              <div class="field-grid workorder-field-grid">
+                <div class="field">
+                  <label for="moldflowRequired"
+                    >Moldflow Analysis Required?</label
+                  >
+                  <input id="moldflowRequired" placeholder="Y / N / n/a" />
+                </div>
+                <div class="field">
+                  <label for="coolingWarp">Cooling / Warp Required?</label>
+                  <input id="coolingWarp" placeholder="Y / N / n/a" />
+                </div>
+                <div class="field">
+                  <label for="moldflowSource">Moldflow Source</label>
+                  <input id="moldflowSource" placeholder="Source" />
+                </div>
+                <div class="field">
+                  <label for="gm8Standards">GM E8 Standards</label>
+                  <input id="gm8Standards" placeholder="n/a or details" />
+                </div>
+                <div class="field">
+                  <label for="coreFinish">Core Finish</label>
+                  <input id="coreFinish" placeholder="Finish" />
+                </div>
+                <div class="field">
+                  <label for="cavityFinish">Cavity Finish</label>
+                  <input id="cavityFinish" placeholder="Finish" />
+                </div>
+                <div class="field">
+                  <label for="coreGrain">Core Grain</label>
+                  <input id="coreGrain" placeholder="Grain" />
+                </div>
+                <div class="field">
+                  <label for="cavityGrain">Cavity Grain</label>
+                  <input id="cavityGrain" placeholder="Grain" />
+                </div>
+                <div class="field">
+                  <label for="maxRadius">Max. Radius Allowed</label>
+                  <input id="maxRadius" placeholder="Radius" />
+                </div>
+                <div class="field">
+                  <label for="opticSurface">Optic Surface Finish</label>
+                  <input id="opticSurface" placeholder="Finish" />
                 </div>
               </div>
             </div>
@@ -1328,6 +1716,559 @@
       </div>
     </div>
 
+    <div class="modal-overlay" id="workOrderPreviewModal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="workOrderPreviewTitle"
+      >
+        <div class="modal-header">
+          <div class="modal-title">
+            <h3 id="workOrderPreviewTitle">Work Order Preview</h3>
+            <p>Customer requirements and approval form preview.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="icon-btn" id="workOrderPrintBtn">Print</button>
+            <button class="icon-btn" id="workOrderCloseBtn">Close</button>
+          </div>
+        </div>
+
+        <div class="workorder-preview-sheet">
+          <div class="workorder-preview-note">Page 1/3</div>
+
+          <div class="workorder-preview-header">
+            <div class="workorder-preview-brand">
+              <div class="workorder-preview-logo">redoe</div>
+              <div>
+                <div class="workorder-preview-company-line">
+                  Redoe Mold Company Ltd. / 1615 Morton Industrial Parkway
+                  Lasalle, Ontario N9J 3W2 CANADA Phone: (519) 734 - 6161
+                </div>
+                <h2 class="workorder-preview-title">
+                  Customer Requirements &amp; Approval Form
+                </h2>
+                <p class="workorder-preview-subtitle">
+                  PMG-F738-Customer Requirements &amp; Approval Form-04
+                </p>
+              </div>
+            </div>
+
+            <div class="workorder-preview-job-box">
+              <div class="workorder-preview-job-row">
+                <div class="workorder-preview-job-label">Job #:</div>
+                <div
+                  class="workorder-preview-job-value highlight"
+                  id="woPreviewJob"
+                >
+                  —
+                </div>
+              </div>
+              <div class="workorder-preview-job-row">
+                <div class="workorder-preview-job-label">PM:</div>
+                <div class="workorder-preview-job-value" id="woPreviewPm">
+                  —
+                </div>
+              </div>
+              <div class="workorder-preview-job-row">
+                <div class="workorder-preview-job-label">Rev #:</div>
+                <div class="workorder-preview-job-value" id="woPreviewRev">
+                  —
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label">Program / Part:</td>
+              <td
+                class="workorder-preview-value large"
+                colspan="3"
+                id="woPreviewProgramPart"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label orange">Customer Mold #:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCustomerMold"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" colspan="2">
+                Customer Name:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCustomerName"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Contact:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewContactName"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" colspan="2">Quote #:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewQuoteNumber"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">
+                Customer Standards (File Name)
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewStandardsFile"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" colspan="2">Part #:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewPartNumber"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Model Year:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewModelYear"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" colspan="2">Start Date:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewStartDate"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">
+                # Weeks after steel purchase to T1:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewWeeksAfterSteel"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label"># of Cavities:</td>
+              <td class="workorder-preview-value" id="woPreviewCavities">—</td>
+              <td class="workorder-preview-label">Tool Build Units:</td>
+              <td class="workorder-preview-value" id="woPreviewToolBuildUnits">
+                —
+              </td>
+              <td class="workorder-preview-label">Production Qty:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewProductionQty"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" rowspan="2">
+                Quoted Steel Requirements:
+              </td>
+              <td class="workorder-preview-label">Cavity Steel:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCavitySteel"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Cavity Size:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCavitySize"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Core Steel:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCoreSteel"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Core Size:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCoreSize"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label" rowspan="5">
+                Quoted Mechanisms, Including Steel Types &amp; Sizes
+              </td>
+              <td class="workorder-preview-label">Lifters:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewLifters"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Slides:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewSlides"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Hook Slides:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewHookSlides"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Retractors:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewRetractors"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Inserts:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewInserts"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label" rowspan="4">
+                Customer Press Specification &amp; Tryout Press Information
+              </td>
+              <td class="workorder-preview-label">
+                Machine Type &amp; Tonnage:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewMachineTonnage"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">
+                Press # &amp; Plant Location:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewPlantLocation"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">
+                Tryout Press Location &amp; Size:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewTryoutPress"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">Press Notes:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewPressNotes"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label" rowspan="5">
+                Runner System:
+              </td>
+              <td class="workorder-preview-label orange">
+                Runner Design &amp; Size:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewRunnerDesign"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">
+                Gate Type &amp; Size:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewGateType"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">Manifold Supplier:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewManifoldSupplier"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">
+                Spherical Rad &amp; Orifice:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewSphericalRad"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">
+                Manifold Spares Required:
+              </td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewManifoldSpares"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label">Ejection:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewEjectionPins"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Ejection Notes</td>
+              <td
+                class="workorder-preview-value"
+                colspan="3"
+                id="woPreviewEjectionNotes"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">Ejection Style</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewEjectionStyle"
+              >
+                —
+              </td>
+              <td class="workorder-preview-value" colspan="4"></td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label" rowspan="3">Material:</td>
+              <td class="workorder-preview-label">Colour:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewMaterialColour"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Type:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewMaterialType"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Shrink:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="5"
+                id="woPreviewShrink"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Special Mold:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="6"
+                id="woPreviewCycleTime"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label orange">Notes:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="6"
+                id="woPreviewMoldNotes"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+
+          <table class="workorder-preview-table">
+            <tr>
+              <td class="workorder-preview-label">Moldflow Analysis</td>
+              <td class="workorder-preview-label">Required? Y / N:</td>
+              <td
+                class="workorder-preview-value"
+                id="woPreviewMoldflowRequired"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Cooling / Warp Required?</td>
+              <td class="workorder-preview-value" id="woPreviewCoolingWarp">
+                —
+              </td>
+              <td class="workorder-preview-label">Moldflow Source:</td>
+              <td class="workorder-preview-value" id="woPreviewMoldflowSource">
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">GM E8 Standards:</td>
+              <td class="workorder-preview-value" id="woPreviewGM8Standards">
+                —
+              </td>
+              <td class="workorder-preview-label">Core Finish:</td>
+              <td class="workorder-preview-value" id="woPreviewCoreFinish">
+                —
+              </td>
+              <td class="workorder-preview-label">Cavity Finish:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCavityFinish"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Core Grain:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="3"
+                id="woPreviewCoreGrain"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Cavity Grain:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewCavityGrain"
+              >
+                —
+              </td>
+            </tr>
+            <tr>
+              <td class="workorder-preview-label">Max. Radius Allowed:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="3"
+                id="woPreviewMaxRadius"
+              >
+                —
+              </td>
+              <td class="workorder-preview-label">Optic Surface Finish:</td>
+              <td
+                class="workorder-preview-value"
+                colspan="2"
+                id="woPreviewOpticSurface"
+              >
+                —
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <script>
       const jobList = [
         "R1234",
@@ -1351,6 +2292,61 @@
             "Centralized ISO F738 job record for launch readiness, release tracking, and internal process visibility.",
           requirements:
             "Confirm document revision before release. Validate matched standards against customer-specific overrides. Export clean copy for controlled distribution.",
+          pmName: "David Martino",
+          pmPhone: "(519) 566-6626",
+          customerMold: "M12301",
+          contactName: "Roger Churchill",
+          quoteNumber: "A42553_NA_CHL_12_R2",
+          customerStandardsFile:
+            "S:\\CUSTOMER_STANDARDS\\NAL\\NAL - general\\MC Manual PDF.pdf",
+          partNumber: "10171-8A16J/K\n10071-8A16J/L",
+          modelYear: "2028",
+          startDate: "2026-02-09",
+          weeksAfterSteel: "18",
+          cavities: "LH + 1RH",
+          toolBuildUnits: "Metric",
+          productionQty: "14000 per year",
+          cavitySteel: "P-20 MLQ 34-38 Rc",
+          coreSteel: "P-20 MLQ-Xtra-38-40 Rc",
+          cavitySize: "18x38x60",
+          coreSize: "18x38x60",
+          lifters:
+            "Angle Block Lifter Max 64mm long x2 per. 4x4x16 4 pcs quoted",
+          slides: "Angle Horn Pin Mc60.13 X1per. 5x5x6 16 pcs quoted.",
+          hookSlides: "NA Straight lifters 4x4x4 20 quoted",
+          retractors: "NA",
+          inserts: "NA",
+          machineTonnage: "1450ton",
+          plantLocation: "Alabama",
+          tryoutPress: "As per standards.",
+          pressNotes: "vertical",
+          runnerDesign:
+            "Round (dia.8 main; dia.6 branch) with Shut-off inserts",
+          gateType:
+            "Edge gate Opaque Black - 2mm x 8mm 1 per, Edge Gate Clear 2mmx8mm 2 per",
+          manifoldSupplier:
+            "HRS 2 Drop Black Thru body, Clear 4 Drop Thru Body.",
+          sphericalRad: "as per NAL Standards",
+          manifoldSpares: "NO",
+          ejectionPins: "Ejector blades (as needed), Block lifter (as needed)",
+          ejectionStyle: "Spring Loaded",
+          ejectionNotes: "K.O. Patterns to be always included in steel size",
+          materialColour: "1 station Clear, 2 station Opaque Black",
+          materialType: "PC",
+          shrink: '1.006"',
+          cycleTime: "Cycle Time 50sec.",
+          moldNotes:
+            "Due to wrap of part/clearance and 70 mm ej stroke\nAngle Block Lifter Max. 64mm long",
+          moldflowRequired: "n/a",
+          coolingWarp: "n/a",
+          moldflowSource: "NA",
+          gm8Standards: "n/a",
+          coreFinish: "A1 Finish",
+          cavityFinish: "A1 Finish",
+          coreGrain: "TH110A, TH105A",
+          cavityGrain: "NA",
+          maxRadius: "R.032",
+          opticSurface: "High Quality CNC",
         },
         R2048: {
           customer: "GM",
@@ -1360,6 +2356,55 @@
             "Review release package for pre-build quality alignment and document completeness.",
           requirements:
             "Verify design package revision alignment with kickoff standards and customer notes.",
+          pmName: "Kevin Peltier",
+          pmPhone: "(519) 111-2233",
+          customerMold: "GM-2048",
+          contactName: "Ashley Dunn",
+          quoteNumber: "GM_2048_APQ_R1",
+          customerStandardsFile: "GM Door Applique Standards.pdf",
+          partNumber: "2048-AP-001",
+          modelYear: "2027",
+          startDate: "2026-03-11",
+          weeksAfterSteel: "16",
+          cavities: "2",
+          toolBuildUnits: "Metric",
+          productionQty: "18000 per year",
+          cavitySteel: "P20 32-36 Rc",
+          coreSteel: "P20 Xtra 36-40 Rc",
+          cavitySize: "20x40x58",
+          coreSize: "20x40x58",
+          lifters: "2 quoted",
+          slides: "1 main slide quoted",
+          hookSlides: "None",
+          retractors: "None",
+          inserts: "2 service inserts",
+          machineTonnage: "1300 ton",
+          plantLocation: "Michigan",
+          tryoutPress: "Detroit tryout press",
+          pressNotes: "Standard setup",
+          runnerDesign: "Round main runner",
+          gateType: "Edge gate",
+          manifoldSupplier: "Mastip",
+          sphericalRad: "Per customer",
+          manifoldSpares: "No",
+          ejectionPins: "Pins and blades as required",
+          ejectionStyle: "Standard",
+          ejectionNotes: "Verify knockout pattern",
+          materialColour: "Black",
+          materialType: "PC/ABS",
+          shrink: "1.005",
+          cycleTime: "Cycle Time 48 sec.",
+          moldNotes: "General launch note",
+          moldflowRequired: "Y",
+          coolingWarp: "Y",
+          moldflowSource: "Customer",
+          gm8Standards: "Required",
+          coreFinish: "B1",
+          cavityFinish: "B1",
+          coreGrain: "MT11010",
+          cavityGrain: "MT11010",
+          maxRadius: "R.020",
+          opticSurface: "Not required",
         },
         R3176: {
           customer: "Ford",
@@ -1376,6 +2421,60 @@
           scope: "Track internal document status for plate package readiness.",
           requirements:
             "Use default internal controls and mark document for release review.",
+          pmName: "David Martino",
+          pmPhone: "(519) 566-6626",
+          customerMold: "R8128",
+          contactName: "Roger Churchill",
+          quoteNumber: "A42553_NA_CHL_12_R2",
+          customerStandardsFile: "NAL complete manual 06.18.25.pdf",
+          partNumber: "10171-8A16J/K\n10071-8A16J/L",
+          modelYear: "2028",
+          startDate: "2026-02-09",
+          weeksAfterSteel: "18",
+          cavities: "LH + 1RH",
+          toolBuildUnits: "Metric",
+          productionQty: "14000 per year",
+          cavitySteel: "P-20 MLQ 34-38 Rc",
+          coreSteel: "P-20 MLQ-Xtra-38-40 Rc",
+          cavitySize: "18x38x60",
+          coreSize: "18x38x60",
+          lifters:
+            "Angle Block Lifter Max 64mm long x2 per. 4x4x16 4 pcs quoted",
+          slides: "Angle Horn Pin Mc60.13 X1per. 5x5x6 16 pcs quoted.",
+          hookSlides: "NA Straight lifters 4x4x4 20 quoted",
+          retractors: "NA",
+          inserts: "NA",
+          machineTonnage: "1450ton",
+          plantLocation: "Alabama",
+          tryoutPress: "As per standards.",
+          pressNotes: "vertical",
+          runnerDesign:
+            "Round (dia.8 main; dia.6 branch) with Shut-off inserts",
+          gateType:
+            "Edge gate Opaque Black - 2mm x 8mm 1 per, Edge Gate Clear 2mmx8mm 2 per",
+          manifoldSupplier:
+            "HRS 2 Drop Black Thru body, Clear 4 Drop Thru Body.",
+          sphericalRad: "as per NAL Standards",
+          manifoldSpares: "NO",
+          ejectionPins: "Ejector blades (as needed), Block lifter (as needed)",
+          ejectionStyle: "Spring Loaded",
+          ejectionNotes: "K.O. Patterns to be always included in steel size",
+          materialColour: "1 station Clear, 2 station Opaque Black",
+          materialType: "PC",
+          shrink: '1.006"',
+          cycleTime: "Cycle Time 50sec.",
+          moldNotes:
+            "Due to wrap of part/clearance and 70 mm ej stroke\nAngle Block Lifter Max. 64mm long",
+          moldflowRequired: "n/a",
+          coolingWarp: "n/a",
+          moldflowSource: "NA",
+          gm8Standards: "n/a",
+          coreFinish: "A1 Finish",
+          cavityFinish: "A1 Finish",
+          coreGrain: "TH110A, TH105A",
+          cavityGrain: "NA",
+          maxRadius: "R.032",
+          opticSurface: "High Quality CNC",
         },
         R5189: {
           customer: "GM",
@@ -1550,6 +2649,9 @@
       const checklistModalSubtitle = document.getElementById(
         "checklistModalSubtitle",
       );
+      const workOrderPreviewModal = document.getElementById(
+        "workOrderPreviewModal",
+      );
 
       navButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -1664,16 +2766,83 @@
         checklistModalOverlay.classList.remove("active");
       }
 
+      function setValue(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = value || "";
+      }
+
+      function textOrDash(value) {
+        return value && String(value).trim() ? String(value) : "—";
+      }
+
+      function fillText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = textOrDash(value);
+      }
+
       function loadJobByNumber(jobNumber) {
         const job = jobDetails[jobNumber];
         if (!job) return;
 
-        document.getElementById("jobNumber").value = jobNumber;
-        document.getElementById("customer").value = job.customer;
-        document.getElementById("partName").value = job.partName;
-        document.getElementById("docRev").value = job.revision;
-        document.getElementById("scope").value = job.scope;
-        document.getElementById("requirements").value = job.requirements;
+        setValue("jobNumber", jobNumber);
+        setValue("customer", job.customer);
+        setValue("partName", job.partName);
+        setValue("docRev", job.revision);
+        setValue("scope", job.scope);
+        setValue("requirements", job.requirements);
+
+        setValue("pmName", job.pmName);
+        setValue("pmPhone", job.pmPhone);
+        setValue("customerMold", job.customerMold);
+        setValue("contactName", job.contactName);
+        setValue("quoteNumber", job.quoteNumber);
+        setValue("customerStandardsFile", job.customerStandardsFile);
+        setValue("partNumber", job.partNumber);
+        setValue("modelYear", job.modelYear);
+        setValue("startDate", job.startDate);
+        setValue("weeksAfterSteel", job.weeksAfterSteel);
+        setValue("cavities", job.cavities);
+        setValue("toolBuildUnits", job.toolBuildUnits);
+        setValue("productionQty", job.productionQty);
+        setValue("cavitySteel", job.cavitySteel);
+        setValue("coreSteel", job.coreSteel);
+        setValue("cavitySize", job.cavitySize);
+        setValue("coreSize", job.coreSize);
+        setValue("lifters", job.lifters);
+        setValue("slides", job.slides);
+        setValue("hookSlides", job.hookSlides);
+        setValue("retractors", job.retractors);
+        setValue("inserts", job.inserts);
+        setValue("machineTonnage", job.machineTonnage);
+        setValue("plantLocation", job.plantLocation);
+        setValue("tryoutPress", job.tryoutPress);
+        setValue("pressNotes", job.pressNotes);
+        setValue("runnerDesign", job.runnerDesign);
+        setValue("gateType", job.gateType);
+        setValue("manifoldSupplier", job.manifoldSupplier);
+        setValue("sphericalRad", job.sphericalRad);
+        setValue("manifoldSpares", job.manifoldSpares);
+        setValue("ejectionPins", job.ejectionPins);
+        setValue("ejectionStyle", job.ejectionStyle);
+        setValue("ejectionNotes", job.ejectionNotes);
+        setValue("materialColour", job.materialColour);
+        setValue("materialType", job.materialType);
+        setValue("shrink", job.shrink);
+        setValue("cycleTime", job.cycleTime);
+        setValue("moldNotes", job.moldNotes);
+        setValue("moldflowRequired", job.moldflowRequired);
+        setValue("coolingWarp", job.coolingWarp);
+        setValue("moldflowSource", job.moldflowSource);
+        setValue("gm8Standards", job.gm8Standards);
+        setValue("coreFinish", job.coreFinish);
+        setValue("cavityFinish", job.cavityFinish);
+        setValue("coreGrain", job.coreGrain);
+        setValue("cavityGrain", job.cavityGrain);
+        setValue("maxRadius", job.maxRadius);
+        setValue("opticSurface", job.opticSurface);
+
         updatePreview();
         renderChecklistStageCards();
         renderChecklistReference();
@@ -1691,23 +2860,207 @@
         const part = document.getElementById("partName").value || "—";
         const rev = document.getElementById("docRev").value || "—";
         const scope =
-          document.getElementById("scope").value || "No scope entered.";
+          document.getElementById("scope")?.value || "No scope entered.";
         const req =
-          document.getElementById("requirements").value ||
+          document.getElementById("requirements")?.value ||
           "No requirements entered.";
 
-        document.getElementById("previewJob").textContent = job;
-        document.getElementById("previewCustomer").textContent = customer;
-        document.getElementById("previewPart").textContent = part;
-        document.getElementById("previewRev").textContent = rev;
-        document.getElementById("previewScope").textContent = scope;
-        document.getElementById("previewRequirements").textContent = req;
+        document.getElementById("metricRev").textContent = rev;
 
         if (heroJobSelect.value !== job && jobList.includes(job)) {
           heroJobSelect.value = job;
         }
 
-        document.getElementById("metricRev").textContent = rev;
+        fillText("woPreviewJob", job);
+        fillText(
+          "woPreviewPm",
+          `${document.getElementById("pmName").value || "—"}${
+            document.getElementById("pmPhone").value
+              ? ": " + document.getElementById("pmPhone").value
+              : ""
+          }`,
+        );
+        fillText("woPreviewRev", rev);
+        fillText("woPreviewProgramPart", part);
+        fillText(
+          "woPreviewCustomerMold",
+          document.getElementById("customerMold").value,
+        );
+        fillText("woPreviewCustomerName", customer);
+        fillText(
+          "woPreviewContactName",
+          document.getElementById("contactName").value,
+        );
+        fillText(
+          "woPreviewQuoteNumber",
+          document.getElementById("quoteNumber").value,
+        );
+        fillText(
+          "woPreviewStandardsFile",
+          document.getElementById("customerStandardsFile").value,
+        );
+        fillText(
+          "woPreviewPartNumber",
+          document.getElementById("partNumber").value,
+        );
+        fillText(
+          "woPreviewModelYear",
+          document.getElementById("modelYear").value,
+        );
+        fillText(
+          "woPreviewStartDate",
+          document.getElementById("startDate").value,
+        );
+        fillText(
+          "woPreviewWeeksAfterSteel",
+          document.getElementById("weeksAfterSteel").value,
+        );
+        fillText(
+          "woPreviewCavities",
+          document.getElementById("cavities").value,
+        );
+        fillText(
+          "woPreviewToolBuildUnits",
+          document.getElementById("toolBuildUnits").value,
+        );
+        fillText(
+          "woPreviewProductionQty",
+          document.getElementById("productionQty").value,
+        );
+        fillText(
+          "woPreviewCavitySteel",
+          document.getElementById("cavitySteel").value,
+        );
+        fillText(
+          "woPreviewCoreSteel",
+          document.getElementById("coreSteel").value,
+        );
+        fillText(
+          "woPreviewCavitySize",
+          document.getElementById("cavitySize").value,
+        );
+        fillText(
+          "woPreviewCoreSize",
+          document.getElementById("coreSize").value,
+        );
+        fillText("woPreviewLifters", document.getElementById("lifters").value);
+        fillText("woPreviewSlides", document.getElementById("slides").value);
+        fillText(
+          "woPreviewHookSlides",
+          document.getElementById("hookSlides").value,
+        );
+        fillText(
+          "woPreviewRetractors",
+          document.getElementById("retractors").value,
+        );
+        fillText("woPreviewInserts", document.getElementById("inserts").value);
+        fillText(
+          "woPreviewMachineTonnage",
+          document.getElementById("machineTonnage").value,
+        );
+        fillText(
+          "woPreviewPlantLocation",
+          document.getElementById("plantLocation").value,
+        );
+        fillText(
+          "woPreviewTryoutPress",
+          document.getElementById("tryoutPress").value,
+        );
+        fillText(
+          "woPreviewPressNotes",
+          document.getElementById("pressNotes").value,
+        );
+        fillText(
+          "woPreviewRunnerDesign",
+          document.getElementById("runnerDesign").value,
+        );
+        fillText(
+          "woPreviewGateType",
+          document.getElementById("gateType").value,
+        );
+        fillText(
+          "woPreviewManifoldSupplier",
+          document.getElementById("manifoldSupplier").value,
+        );
+        fillText(
+          "woPreviewSphericalRad",
+          document.getElementById("sphericalRad").value,
+        );
+        fillText(
+          "woPreviewManifoldSpares",
+          document.getElementById("manifoldSpares").value,
+        );
+        fillText(
+          "woPreviewEjectionPins",
+          document.getElementById("ejectionPins").value,
+        );
+        fillText(
+          "woPreviewEjectionStyle",
+          document.getElementById("ejectionStyle").value,
+        );
+        fillText(
+          "woPreviewEjectionNotes",
+          document.getElementById("ejectionNotes").value,
+        );
+        fillText(
+          "woPreviewMaterialColour",
+          document.getElementById("materialColour").value,
+        );
+        fillText(
+          "woPreviewMaterialType",
+          document.getElementById("materialType").value,
+        );
+        fillText("woPreviewShrink", document.getElementById("shrink").value);
+        fillText(
+          "woPreviewCycleTime",
+          document.getElementById("cycleTime").value,
+        );
+        fillText(
+          "woPreviewMoldNotes",
+          document.getElementById("moldNotes").value,
+        );
+        fillText(
+          "woPreviewMoldflowRequired",
+          document.getElementById("moldflowRequired").value,
+        );
+        fillText(
+          "woPreviewCoolingWarp",
+          document.getElementById("coolingWarp").value,
+        );
+        fillText(
+          "woPreviewMoldflowSource",
+          document.getElementById("moldflowSource").value,
+        );
+        fillText(
+          "woPreviewGM8Standards",
+          document.getElementById("gm8Standards").value,
+        );
+        fillText(
+          "woPreviewCoreFinish",
+          document.getElementById("coreFinish").value,
+        );
+        fillText(
+          "woPreviewCavityFinish",
+          document.getElementById("cavityFinish").value,
+        );
+        fillText(
+          "woPreviewCoreGrain",
+          document.getElementById("coreGrain").value,
+        );
+        fillText(
+          "woPreviewCavityGrain",
+          document.getElementById("cavityGrain").value,
+        );
+        fillText(
+          "woPreviewMaxRadius",
+          document.getElementById("maxRadius").value,
+        );
+        fillText(
+          "woPreviewOpticSurface",
+          document.getElementById("opticSurface").value,
+        );
+
+        window.__legacyPreview = { job, customer, part, rev, scope, req };
       }
 
       function renderChecklistReference() {
@@ -1830,6 +3183,15 @@
           lines.join("\n");
       }
 
+      function openWorkOrderPreview() {
+        updatePreview();
+        workOrderPreviewModal.classList.add("active");
+      }
+
+      function closeWorkOrderPreview() {
+        workOrderPreviewModal.classList.remove("active");
+      }
+
       document
         .getElementById("loadDemoBtn")
         .addEventListener("click", loadDemoJob);
@@ -1842,8 +3204,15 @@
       document
         .getElementById("generateQuickRefBtn")
         .addEventListener("click", generateQuickRef);
+
       document
-        .getElementById("exportPreviewBtn")
+        .getElementById("openWorkOrderPreviewBtn")
+        .addEventListener("click", openWorkOrderPreview);
+      document
+        .getElementById("workOrderCloseBtn")
+        .addEventListener("click", closeWorkOrderPreview);
+      document
+        .getElementById("workOrderPrintBtn")
         .addEventListener("click", () => window.print());
 
       document
@@ -1864,6 +3233,10 @@
 
       checklistModalOverlay.addEventListener("click", (event) => {
         if (event.target === checklistModalOverlay) closeChecklistModal();
+      });
+
+      workOrderPreviewModal.addEventListener("click", (event) => {
+        if (event.target === workOrderPreviewModal) closeWorkOrderPreview();
       });
 
       heroJobSelect.addEventListener("change", (event) => {
