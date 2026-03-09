@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ISO Hub POC</title>
+    <title>REDO Document Hub</title>
     <style>
       :root {
         --bg: #0b1220;
-        --panel: #121a2b;
+        --bg-gradient-start: #08101d;
+        --bg-gradient-end: #0f172a;
+        --sidebar-bg: rgba(9, 14, 26, 0.95);
+        --panel: rgba(18, 26, 43, 0.94);
         --panel-2: #172238;
+        --panel-solid: #0d1526;
         --border: #2a3957;
         --text: #e8eefc;
         --muted: #9db0d3;
@@ -16,13 +20,68 @@
         --accent-2: #ffbe3d;
         --success: #10b981;
         --danger: #ef4444;
+        --metric-bg: rgba(9, 15, 27, 0.45);
+        --metric-border: rgba(255, 255, 255, 0.07);
+        --hero-bg: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.16),
+          rgba(255, 255, 255, 0.02)
+        );
+        --hero-border: rgba(245, 158, 11, 0.22);
+        --button-secondary-bg: #1a2439;
+        --input-bg: #0d1526;
+        --doc-bg: linear-gradient(180deg, #fff 0%, #f5f7fb 100%);
+        --doc-text: #1f2937;
+        --doc-border: #d7deea;
+        --doc-meta-bg: #eef2f8;
+        --tag-bg: rgba(245, 158, 11, 0.14);
+        --tag-text: #ffd48c;
+        --tag-border: rgba(245, 158, 11, 0.22);
+        --quick-ref-border: #4a5f88;
+        --quick-ref-text: #dce8ff;
         --shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
         --radius: 18px;
+      }
+
+      body.theme-lark {
+        --bg: #f4f7fb;
+        --bg-gradient-start: #eef4fb;
+        --bg-gradient-end: #f8fbff;
+        --sidebar-bg: rgba(255, 255, 255, 0.92);
+        --panel: rgba(255, 255, 255, 0.95);
+        --panel-2: #e8eff8;
+        --panel-solid: #f7fafe;
+        --border: #d7e2f0;
+        --text: #1f2a3d;
+        --muted: #66758f;
+        --accent: #3370ff;
+        --accent-2: #69a1ff;
+        --metric-bg: rgba(245, 248, 253, 0.95);
+        --metric-border: rgba(31, 42, 61, 0.08);
+        --hero-bg: linear-gradient(
+          135deg,
+          rgba(51, 112, 255, 0.14),
+          rgba(255, 255, 255, 0.7)
+        );
+        --hero-border: rgba(51, 112, 255, 0.2);
+        --button-secondary-bg: #eef4ff;
+        --input-bg: #ffffff;
+        --doc-bg: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+        --doc-text: #1f2937;
+        --doc-border: #d8e3f2;
+        --doc-meta-bg: #edf4ff;
+        --tag-bg: rgba(51, 112, 255, 0.12);
+        --tag-text: #2757c7;
+        --tag-border: rgba(51, 112, 255, 0.18);
+        --quick-ref-border: #b8caea;
+        --quick-ref-text: #27405f;
+        --shadow: 0 16px 36px rgba(31, 42, 61, 0.08);
       }
 
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         font-family:
@@ -30,8 +89,15 @@
           Segoe UI,
           Arial,
           sans-serif;
-        background: linear-gradient(180deg, #08101d 0%, #0f172a 100%);
+        background: linear-gradient(
+          180deg,
+          var(--bg-gradient-start) 0%,
+          var(--bg-gradient-end) 100%
+        );
         color: var(--text);
+        transition:
+          background 0.25s ease,
+          color 0.25s ease;
       }
 
       .app {
@@ -41,12 +107,13 @@
       }
 
       .sidebar {
-        background: rgba(9, 14, 26, 0.95);
+        background: var(--sidebar-bg);
         border-right: 1px solid var(--border);
         padding: 24px 18px;
         position: sticky;
         top: 0;
         height: 100vh;
+        backdrop-filter: blur(10px);
       }
 
       .brand {
@@ -60,7 +127,7 @@
         width: 42px;
         height: 42px;
         border-radius: 12px;
-        background: linear-gradient(135deg, var(--accent), #b45309);
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
         display: grid;
         place-items: center;
         font-weight: 800;
@@ -78,6 +145,44 @@
         margin: 3px 0 0;
         font-size: 0.84rem;
         color: var(--muted);
+      }
+
+      .theme-switcher {
+        margin-bottom: 20px;
+      }
+
+      .theme-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+      }
+
+      .theme-toggle small {
+        display: block;
+        font-weight: 500;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .theme-pill {
+        min-width: 82px;
+        text-align: center;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #111827;
+        font-size: 0.82rem;
+        font-weight: 800;
       }
 
       .nav {
@@ -109,12 +214,8 @@
       }
 
       .hero {
-        background: linear-gradient(
-          135deg,
-          rgba(245, 158, 11, 0.16),
-          rgba(255, 255, 255, 0.02)
-        );
-        border: 1px solid rgba(245, 158, 11, 0.22);
+        background: var(--hero-bg);
+        border: 1px solid var(--hero-border);
         border-radius: 22px;
         padding: 24px;
         box-shadow: var(--shadow);
@@ -137,7 +238,7 @@
       .hero p {
         margin: 0;
         max-width: 760px;
-        color: #d7e3ff;
+        color: var(--muted);
         line-height: 1.55;
       }
 
@@ -162,7 +263,7 @@
       }
 
       .btn-secondary {
-        background: #1a2439;
+        background: var(--button-secondary-bg);
         color: var(--text);
         border: 1px solid var(--border);
       }
@@ -179,8 +280,8 @@
       }
 
       .metric {
-        background: rgba(9, 15, 27, 0.45);
-        border: 1px solid rgba(255, 255, 255, 0.07);
+        background: var(--metric-bg);
+        border: 1px solid var(--metric-border);
         border-radius: 16px;
         padding: 16px;
       }
@@ -203,7 +304,7 @@
       }
 
       .panel {
-        background: rgba(18, 26, 43, 0.94);
+        background: var(--panel);
         border: 1px solid var(--border);
         border-radius: var(--radius);
         padding: 20px;
@@ -225,6 +326,7 @@
       .section {
         display: none;
       }
+
       .section.active {
         display: block;
       }
@@ -254,7 +356,7 @@
       select,
       textarea {
         width: 100%;
-        background: #0d1526;
+        background: var(--input-bg);
         border: 1px solid var(--border);
         color: var(--text);
         padding: 12px 13px;
@@ -269,12 +371,12 @@
       }
 
       .doc-preview {
-        background: linear-gradient(180deg, #fff 0%, #f5f7fb 100%);
-        color: #1f2937;
+        background: var(--doc-bg);
+        color: var(--doc-text);
         border-radius: 18px;
         padding: 22px;
         min-height: 420px;
-        border: 1px solid #d7deea;
+        border: 1px solid var(--doc-border);
       }
 
       .doc-preview h4 {
@@ -291,7 +393,7 @@
       }
 
       .doc-meta div {
-        background: #eef2f8;
+        background: var(--doc-meta-bg);
         border-radius: 12px;
         padding: 10px 12px;
       }
@@ -306,7 +408,7 @@
         display: flex;
         gap: 12px;
         align-items: flex-start;
-        background: #0d1526;
+        background: var(--panel-solid);
         border: 1px solid var(--border);
         border-radius: 14px;
         padding: 13px;
@@ -324,7 +426,7 @@
       }
 
       .mini-card {
-        background: #0d1526;
+        background: var(--panel-solid);
         border: 1px solid var(--border);
         border-radius: 14px;
         padding: 14px;
@@ -334,6 +436,7 @@
         display: block;
         margin-bottom: 4px;
       }
+
       .mini-card p {
         margin: 0;
         color: var(--muted);
@@ -351,9 +454,9 @@
         display: inline-flex;
         align-items: center;
         padding: 5px 9px;
-        background: rgba(245, 158, 11, 0.14);
-        color: #ffd48c;
-        border: 1px solid rgba(245, 158, 11, 0.22);
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        border: 1px solid var(--tag-border);
         border-radius: 999px;
         font-size: 0.78rem;
         font-weight: 700;
@@ -361,8 +464,8 @@
       }
 
       .quick-ref {
-        background: #0d1526;
-        border: 1px dashed #4a5f88;
+        background: var(--panel-solid);
+        border: 1px dashed var(--quick-ref-border);
         border-radius: 14px;
         padding: 14px;
         margin-top: 12px;
@@ -372,8 +475,34 @@
         white-space: pre-wrap;
         margin: 0;
         font: inherit;
-        color: #dce8ff;
+        color: var(--quick-ref-text);
         line-height: 1.55;
+      }
+
+      @media print {
+        .sidebar,
+        .hero-actions,
+        .theme-switcher {
+          display: none !important;
+        }
+
+        .app {
+          display: block;
+        }
+
+        .main {
+          padding: 0;
+        }
+
+        body {
+          background: #ffffff;
+        }
+
+        .panel,
+        .hero {
+          box-shadow: none;
+          border: 1px solid #d1d5db;
+        }
       }
 
       @media (max-width: 1080px) {
@@ -388,12 +517,14 @@
         .app {
           grid-template-columns: 1fr;
         }
+
         .sidebar {
           position: static;
           height: auto;
           border-right: none;
           border-bottom: 1px solid var(--border);
         }
+
         .main {
           padding: 18px;
         }
@@ -409,6 +540,16 @@
             <h1>REDO Document Hub</h1>
             <p>ISO • Checklists • Standards</p>
           </div>
+        </div>
+
+        <div class="theme-switcher">
+          <button class="theme-toggle" id="themeToggle" type="button">
+            <div>
+              Theme Mode
+              <small>Switch between Dark and Lark</small>
+            </div>
+            <span class="theme-pill" id="themeLabel">Dark</span>
+          </button>
         </div>
 
         <nav class="nav">
@@ -802,9 +943,12 @@
       ];
 
       const selected = [];
+      const THEME_KEY = "redo-doc-hub-theme";
 
       const sections = document.querySelectorAll(".section");
       const navButtons = document.querySelectorAll(".nav button");
+      const themeToggle = document.getElementById("themeToggle");
+      const themeLabel = document.getElementById("themeLabel");
 
       navButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -814,6 +958,18 @@
           document.getElementById(btn.dataset.section).classList.add("active");
         });
       });
+
+      function applyTheme(theme) {
+        const isLark = theme === "lark";
+        document.body.classList.toggle("theme-lark", isLark);
+        themeLabel.textContent = isLark ? "Lark" : "Dark";
+        localStorage.setItem(THEME_KEY, isLark ? "lark" : "dark");
+      }
+
+      function initTheme() {
+        const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+        applyTheme(savedTheme);
+      }
 
       function renderChecklist() {
         const wrap = document.getElementById("checklistItems");
@@ -998,6 +1154,14 @@
         .getElementById("exportBtn")
         .addEventListener("click", () => window.print());
 
+      themeToggle.addEventListener("click", () => {
+        const nextTheme = document.body.classList.contains("theme-lark")
+          ? "dark"
+          : "lark";
+        applyTheme(nextTheme);
+      });
+
+      initTheme();
       renderChecklist();
       renderSelected();
       updatePreview();
