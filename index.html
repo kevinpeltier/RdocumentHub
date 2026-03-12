@@ -1040,6 +1040,101 @@
         font-weight: 700;
       }
 
+      .issue-file-layout {
+        display: grid;
+        grid-template-columns: 1.45fr 0.9fr;
+        gap: 22px;
+        align-items: start;
+      }
+
+      .issue-file-table-wrap {
+        background: var(--panel-solid);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .issue-file-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .issue-file-table thead th {
+        background: var(--table-header-bg);
+        color: var(--muted);
+        text-align: left;
+        font-size: 0.78rem;
+        font-weight: 800;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .issue-file-table tbody td {
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.88rem;
+        vertical-align: top;
+      }
+
+      .issue-file-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .file-status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .file-status-active {
+        background: var(--badge-done-bg);
+        color: var(--badge-done-text);
+      }
+
+      .file-status-obsolete {
+        background: rgba(239, 68, 68, 0.14);
+        color: #ff8f8f;
+      }
+
+      .file-status-checkedout {
+        background: var(--badge-doing-bg);
+        color: var(--badge-doing-text);
+      }
+
+      body.theme-lark .file-status-obsolete {
+        background: rgba(239, 68, 68, 0.1);
+        color: #d14343;
+      }
+
+      .issue-file-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .issue-file-upload-box {
+        background: var(--panel-solid);
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .issue-file-upload-box input[type="file"] {
+        padding: 10px;
+      }
+
+      .issue-file-note {
+        margin-top: 10px;
+        font-size: 0.84rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
       @media print {
         .sidebar,
         .hero-actions,
@@ -1074,7 +1169,8 @@
       }
 
       @media (max-width: 1180px) {
-        .checklist-page-grid {
+        .checklist-page-grid,
+        .issue-file-layout {
           grid-template-columns: 1fr;
         }
       }
@@ -1144,6 +1240,7 @@
         <nav class="nav">
           <button class="active" data-section="dashboard">Dashboard</button>
           <button data-section="f738">Work Orders</button>
+          <button data-section="issuefiles">Issue Files</button>
           <button data-section="checklist">Checklist</button>
           <button data-section="standards">Standards Search</button>
         </nav>
@@ -1569,6 +1666,84 @@
                   <label for="opticSurface">Optic Surface Finish</label>
                   <input id="opticSurface" placeholder="Finish" />
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="issuefiles" class="section">
+          <div class="issue-file-layout">
+            <div class="panel">
+              <h3>Issue Files</h3>
+              <p class="panel-sub">
+                Release CAD cutting files to manufacturing, track active and
+                obsolete files, and monitor shop-floor checkouts for the
+                selected job.
+              </p>
+
+              <div class="issue-file-table-wrap">
+                <table class="issue-file-table">
+                  <thead>
+                    <tr>
+                      <th>File Name</th>
+                      <th>Format</th>
+                      <th>Rev</th>
+                      <th>Status</th>
+                      <th>Released</th>
+                      <th>Checkout</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="issueFilesTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>New Release</h3>
+              <p class="panel-sub">
+                Add new manufacturing files for the currently selected job. This
+                mockup simulates a release and checkout workflow.
+              </p>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="issueReleaseRevision">Release Revision</label>
+                  <input id="issueReleaseRevision" placeholder="e.g. 4" />
+                </div>
+                <div class="field">
+                  <label for="issueReleaseBy">Released By</label>
+                  <input id="issueReleaseBy" placeholder="Name" />
+                </div>
+                <div class="field full">
+                  <label for="issueReleaseNotes">Release Notes</label>
+                  <textarea
+                    id="issueReleaseNotes"
+                    placeholder="What changed in this release?"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="issue-file-upload-box">
+                <div class="field">
+                  <label for="issueFilesUpload">CAD Files</label>
+                  <input
+                    id="issueFilesUpload"
+                    type="file"
+                    multiple
+                    accept=".igs,.iges,.stp,.step,.x_t,.x_b,.prt,.sldprt,.sat,.jt,.pdf"
+                  />
+                </div>
+                <div class="issue-file-note">
+                  Example release types: IGES, STEP, Parasolid, JT, SAT,
+                  SolidWorks part files, and support PDFs.
+                </div>
+              </div>
+
+              <div class="hero-actions" style="margin-top: 14px">
+                <button class="btn btn-primary" id="issueNewReleaseBtn">
+                  New Release
+                </button>
               </div>
             </div>
           </div>
@@ -2644,6 +2819,57 @@
         },
       ];
 
+      const issueFiles = [
+        {
+          id: 1,
+          job: "R4421",
+          fileName: "R4421_CORE_PLATE_REV4.step",
+          format: "STEP",
+          revision: "4",
+          status: "active",
+          releasedDate: "2026-02-01",
+          releasedBy: "David Martino",
+          checkedOutBy: "",
+          checkedOutDate: "",
+        },
+        {
+          id: 2,
+          job: "R4421",
+          fileName: "R4421_CAVITY_INSERT_REV3.igs",
+          format: "IGES",
+          revision: "3",
+          status: "obsolete",
+          releasedDate: "2026-01-24",
+          releasedBy: "David Martino",
+          checkedOutBy: "",
+          checkedOutDate: "",
+        },
+        {
+          id: 3,
+          job: "R2048",
+          fileName: "R2048_DOOR_APPLIQUE_REV2.x_t",
+          format: "Parasolid",
+          revision: "2",
+          status: "checkedout",
+          releasedDate: "2026-01-31",
+          releasedBy: "Kevin Peltier",
+          checkedOutBy: "Shop Floor",
+          checkedOutDate: "2026-02-01",
+        },
+        {
+          id: 4,
+          job: "R1234",
+          fileName: "R1234_TRIM_BEZEL_REV3.stp",
+          format: "STEP",
+          revision: "3",
+          status: "active",
+          releasedDate: "2026-01-29",
+          releasedBy: "David Martino",
+          checkedOutBy: "",
+          checkedOutDate: "",
+        },
+      ];
+
       const selected = [];
       const THEME_KEY = "redo-doc-hub-theme";
 
@@ -2877,6 +3103,7 @@
         updatePreview();
         renderChecklistStageCards();
         renderChecklistReference();
+        renderIssueFiles();
       }
 
       function loadDemoJob() {
@@ -3121,6 +3348,144 @@
         });
       }
 
+      function getIssueFileStatusMarkup(status) {
+        if (status === "active") {
+          return '<span class="file-status-pill file-status-active">Active</span>';
+        }
+        if (status === "obsolete") {
+          return '<span class="file-status-pill file-status-obsolete">Obsolete</span>';
+        }
+        return '<span class="file-status-pill file-status-checkedout">Checked Out</span>';
+      }
+
+      function renderIssueFiles() {
+        const tbody = document.getElementById("issueFilesTableBody");
+        if (!tbody) return;
+
+        const currentJob =
+          document.getElementById("jobNumber").value || heroJobSelect.value;
+        tbody.innerHTML = "";
+
+        if (!currentJob) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7">Select a job to view issued manufacturing files.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        const matches = issueFiles.filter((file) => file.job === currentJob);
+
+        if (!matches.length) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7">No files released yet for ${currentJob}.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        matches.forEach((file) => {
+          const checkoutText =
+            file.status === "checkedout"
+              ? `${file.checkedOutBy || "Shop Floor"}<br><span style="color: var(--muted);">${file.checkedOutDate || ""}</span>`
+              : "Available";
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td><strong>${file.fileName}</strong></td>
+            <td>${file.format}</td>
+            <td>${file.revision}</td>
+            <td>${getIssueFileStatusMarkup(file.status)}</td>
+            <td>${file.releasedDate}<br><span style="color: var(--muted);">${file.releasedBy}</span></td>
+            <td>${checkoutText}</td>
+            <td>
+              <div class="issue-file-actions">
+                <button class="btn btn-secondary btn-sm" data-download-id="${file.id}">Download</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        tbody.querySelectorAll("[data-download-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.downloadId);
+            const record = issueFiles.find((file) => file.id === id);
+            if (!record) return;
+            record.status = "checkedout";
+            record.checkedOutBy = "Shop Floor";
+            record.checkedOutDate = new Date().toISOString().slice(0, 10);
+            renderIssueFiles();
+          });
+        });
+      }
+
+      function detectCadFormat(fileName) {
+        const ext = fileName.split(".").pop().toLowerCase();
+        const formatMap = {
+          igs: "IGES",
+          iges: "IGES",
+          stp: "STEP",
+          step: "STEP",
+          x_t: "Parasolid",
+          x_b: "Parasolid",
+          prt: "NX/Creo",
+          sldprt: "SolidWorks",
+          sat: "SAT",
+          jt: "JT",
+          pdf: "PDF",
+        };
+        return formatMap[ext] || ext.toUpperCase();
+      }
+
+      function handleNewIssueRelease() {
+        const currentJob =
+          document.getElementById("jobNumber").value || heroJobSelect.value;
+        const releaseRevision =
+          document.getElementById("issueReleaseRevision").value.trim() ||
+          document.getElementById("docRev").value.trim() ||
+          "1";
+        const releasedBy =
+          document.getElementById("issueReleaseBy").value.trim() ||
+          "Engineering";
+        const filesInput = document.getElementById("issueFilesUpload");
+        const files = Array.from(filesInput.files || []);
+
+        if (!currentJob) {
+          alert("Please select a job first.");
+          return;
+        }
+
+        if (!files.length) {
+          alert("Please choose at least one CAD file to release.");
+          return;
+        }
+
+        files.forEach((file) => {
+          issueFiles.unshift({
+            id: Date.now() + Math.floor(Math.random() * 1000),
+            job: currentJob,
+            fileName: file.name,
+            format: detectCadFormat(file.name),
+            revision: releaseRevision,
+            status: "active",
+            releasedDate: new Date().toISOString().slice(0, 10),
+            releasedBy,
+            checkedOutBy: "",
+            checkedOutDate: "",
+          });
+        });
+
+        document.getElementById("issueReleaseRevision").value = "";
+        document.getElementById("issueReleaseBy").value = "";
+        document.getElementById("issueReleaseNotes").value = "";
+        filesInput.value = "";
+
+        renderIssueFiles();
+      }
+
       function runSearch() {
         const customer = document.getElementById("standardsCustomer").value;
         const category = document.getElementById("standardsCategory").value;
@@ -3196,6 +3561,9 @@
       document
         .getElementById("runSearchBtn")
         .addEventListener("click", runSearch);
+      document
+        .getElementById("issueNewReleaseBtn")
+        .addEventListener("click", handleNewIssueRelease);
 
       document
         .getElementById("openWorkOrderPreviewBtn")
@@ -3247,6 +3615,7 @@
       renderChecklistStageCards();
       renderChecklistReference();
       renderSelected();
+      renderIssueFiles();
       updatePreview();
     </script>
   </body>
