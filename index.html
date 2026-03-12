@@ -715,6 +715,10 @@
         padding: 18px;
       }
 
+      .modal-sm {
+        width: min(720px, 100%);
+      }
+
       .modal-header {
         display: flex;
         justify-content: space-between;
@@ -1042,7 +1046,7 @@
 
       .issue-file-layout {
         display: grid;
-        grid-template-columns: 1.45fr 0.9fr;
+        grid-template-columns: 1fr;
         gap: 22px;
         align-items: start;
       }
@@ -1674,12 +1678,21 @@
         <section id="issuefiles" class="section">
           <div class="issue-file-layout">
             <div class="panel">
-              <h3>Issue Files</h3>
-              <p class="panel-sub">
-                Release CAD cutting files to manufacturing, track active and
-                obsolete files, and monitor shop-floor checkouts for the
-                selected job.
-              </p>
+              <div class="workorder-header">
+                <div>
+                  <h3>Issue Files</h3>
+                  <p class="panel-sub">
+                    Release CAD cutting files to manufacturing, track active and
+                    obsolete files, and monitor shop-floor checkouts for the
+                    selected job.
+                  </p>
+                </div>
+                <div class="hero-actions">
+                  <button class="btn btn-primary" id="openIssueReleaseModalBtn">
+                    New Release
+                  </button>
+                </div>
+              </div>
 
               <div class="issue-file-table-wrap">
                 <table class="issue-file-table">
@@ -1696,54 +1709,6 @@
                   </thead>
                   <tbody id="issueFilesTableBody"></tbody>
                 </table>
-              </div>
-            </div>
-
-            <div class="panel">
-              <h3>New Release</h3>
-              <p class="panel-sub">
-                Add new manufacturing files for the currently selected job. This
-                mockup simulates a release and checkout workflow.
-              </p>
-
-              <div class="field-grid">
-                <div class="field">
-                  <label for="issueReleaseRevision">Release Revision</label>
-                  <input id="issueReleaseRevision" placeholder="e.g. 4" />
-                </div>
-                <div class="field">
-                  <label for="issueReleaseBy">Released By</label>
-                  <input id="issueReleaseBy" placeholder="Name" />
-                </div>
-                <div class="field full">
-                  <label for="issueReleaseNotes">Release Notes</label>
-                  <textarea
-                    id="issueReleaseNotes"
-                    placeholder="What changed in this release?"
-                  ></textarea>
-                </div>
-              </div>
-
-              <div class="issue-file-upload-box">
-                <div class="field">
-                  <label for="issueFilesUpload">CAD Files</label>
-                  <input
-                    id="issueFilesUpload"
-                    type="file"
-                    multiple
-                    accept=".igs,.iges,.stp,.step,.x_t,.x_b,.prt,.sldprt,.sat,.jt,.pdf"
-                  />
-                </div>
-                <div class="issue-file-note">
-                  Example release types: IGES, STEP, Parasolid, JT, SAT,
-                  SolidWorks part files, and support PDFs.
-                </div>
-              </div>
-
-              <div class="hero-actions" style="margin-top: 14px">
-                <button class="btn btn-primary" id="issueNewReleaseBtn">
-                  New Release
-                </button>
               </div>
             </div>
           </div>
@@ -2425,6 +2390,69 @@
       </div>
     </div>
 
+    <div class="modal-overlay" id="issueReleaseModal">
+      <div
+        class="modal modal-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="issueReleaseModalTitle"
+      >
+        <div class="modal-header">
+          <div class="modal-title">
+            <h3 id="issueReleaseModalTitle">New Release</h3>
+            <p>Add new manufacturing files for the currently selected job.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="icon-btn" id="issueReleaseModalCloseBtn">
+              Close
+            </button>
+          </div>
+        </div>
+
+        <div style="padding-top: 16px">
+          <div class="field-grid">
+            <div class="field">
+              <label for="issueReleaseRevision">Release Revision</label>
+              <input id="issueReleaseRevision" placeholder="e.g. 4" />
+            </div>
+            <div class="field">
+              <label for="issueReleaseBy">Released By</label>
+              <input id="issueReleaseBy" placeholder="Name" />
+            </div>
+            <div class="field full">
+              <label for="issueReleaseNotes">Release Notes</label>
+              <textarea
+                id="issueReleaseNotes"
+                placeholder="What changed in this release?"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="issue-file-upload-box">
+            <div class="field">
+              <label for="issueFilesUpload">CAD Files</label>
+              <input
+                id="issueFilesUpload"
+                type="file"
+                multiple
+                accept=".igs,.iges,.stp,.step,.x_t,.x_b,.prt,.sldprt,.sat,.jt,.pdf"
+              />
+            </div>
+            <div class="issue-file-note">
+              Example release types: IGES, STEP, Parasolid, JT, SAT, SolidWorks
+              part files, and support PDFs.
+            </div>
+          </div>
+
+          <div class="hero-actions" style="margin-top: 14px">
+            <button class="btn btn-primary" id="issueNewReleaseBtn">
+              Save Release
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       const jobList = [
         "R1234",
@@ -2892,6 +2920,7 @@
       const workOrderPreviewModal = document.getElementById(
         "workOrderPreviewModal",
       );
+      const issueReleaseModal = document.getElementById("issueReleaseModal");
 
       navButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -3021,6 +3050,14 @@
 
       function closeChecklistModal() {
         checklistModalOverlay.classList.remove("active");
+      }
+
+      function openIssueReleaseModal() {
+        issueReleaseModal.classList.add("active");
+      }
+
+      function closeIssueReleaseModal() {
+        issueReleaseModal.classList.remove("active");
       }
 
       function setValue(id, value) {
@@ -3392,6 +3429,9 @@
               ? `${file.checkedOutBy || "Shop Floor"}<br><span style="color: var(--muted);">${file.checkedOutDate || ""}</span>`
               : "Available";
 
+          const disableDownload = file.status === "obsolete" ? "disabled" : "";
+          const disableObsolete = file.status === "obsolete" ? "disabled" : "";
+
           const row = document.createElement("tr");
           row.innerHTML = `
             <td><strong>${file.fileName}</strong></td>
@@ -3402,7 +3442,8 @@
             <td>${checkoutText}</td>
             <td>
               <div class="issue-file-actions">
-                <button class="btn btn-secondary btn-sm" data-download-id="${file.id}">Download</button>
+                <button class="btn btn-secondary btn-sm" data-download-id="${file.id}" ${disableDownload}>Download</button>
+                <button class="btn btn-secondary btn-sm" data-obsolete-id="${file.id}" ${disableObsolete}>Obsolete</button>
               </div>
             </td>
           `;
@@ -3413,10 +3454,22 @@
           btn.addEventListener("click", () => {
             const id = Number(btn.dataset.downloadId);
             const record = issueFiles.find((file) => file.id === id);
-            if (!record) return;
+            if (!record || record.status === "obsolete") return;
             record.status = "checkedout";
             record.checkedOutBy = "Shop Floor";
             record.checkedOutDate = new Date().toISOString().slice(0, 10);
+            renderIssueFiles();
+          });
+        });
+
+        tbody.querySelectorAll("[data-obsolete-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.obsoleteId);
+            const record = issueFiles.find((file) => file.id === id);
+            if (!record) return;
+            record.status = "obsolete";
+            record.checkedOutBy = "";
+            record.checkedOutDate = "";
             renderIssueFiles();
           });
         });
@@ -3483,6 +3536,7 @@
         document.getElementById("issueReleaseNotes").value = "";
         filesInput.value = "";
 
+        closeIssueReleaseModal();
         renderIssueFiles();
       }
 
@@ -3564,6 +3618,12 @@
       document
         .getElementById("issueNewReleaseBtn")
         .addEventListener("click", handleNewIssueRelease);
+      document
+        .getElementById("openIssueReleaseModalBtn")
+        .addEventListener("click", openIssueReleaseModal);
+      document
+        .getElementById("issueReleaseModalCloseBtn")
+        .addEventListener("click", closeIssueReleaseModal);
 
       document
         .getElementById("openWorkOrderPreviewBtn")
@@ -3597,6 +3657,10 @@
 
       workOrderPreviewModal.addEventListener("click", (event) => {
         if (event.target === workOrderPreviewModal) closeWorkOrderPreview();
+      });
+
+      issueReleaseModal.addEventListener("click", (event) => {
+        if (event.target === issueReleaseModal) closeIssueReleaseModal();
       });
 
       heroJobSelect.addEventListener("change", (event) => {
